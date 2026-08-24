@@ -45,6 +45,31 @@ jobs:
           test -f "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable/web_release.zip"
           test -f "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable/web_nothreads_release.zip"
 
+      - name: Generate Japanese subset font
+        shell: bash
+        run: |
+          set -euxo pipefail
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends fonts-noto-cjk python3-fonttools fontconfig
+          mkdir -p generated
+          FONT_SRC="$(fc-match 'Noto Sans CJK JP' -f '%{file}\n' | head -n 1)"
+          test -n "$FONT_SRC"
+          test -f "$FONT_SRC"
+          pyftsubset "$FONT_SRC" \
+            --font-number=0 \
+            --text-file=assets/jp_charset.txt \
+            --output-file=generated/MachiLoopJP.otf \
+            --layout-features='*' \
+            --glyph-names \
+            --symbol-cmap \
+            --legacy-cmap \
+            --notdef-glyph \
+            --notdef-outline \
+            --recommended-glyphs \
+            --no-hinting
+          test -s generated/MachiLoopJP.otf
+          ls -lh generated/MachiLoopJP.otf
+
       - name: Validate Godot project
         shell: bash
         run: |
