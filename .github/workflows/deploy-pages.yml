@@ -116,6 +116,18 @@ jobs:
           set -euxo pipefail
           godot --headless --path . --script res://tests/progression_model_test.gd
 
+      - name: FTUE model fixture
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/ftue_model_test.gd
+
+      - name: FTUE persistence fixture
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/ftue_persistence_test.gd
+
       - name: 3D renderer fixture
         shell: bash
         run: |
