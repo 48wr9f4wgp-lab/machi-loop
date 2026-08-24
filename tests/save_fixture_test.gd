@@ -16,12 +16,14 @@ func _init() -> void:
     first.grid[0][0] = 1
     first.cash = 555
     first.v08_goal_stage = 2
+    first.v09_policy = 1
     first._v07_save_city()
     if not FileAccess.file_exists(SAVE_PATH):
         _fail("first save was not created")
         return
 
     first.cash = 556
+    first.v09_policy = 3
     first._v07_save_city()
     if not FileAccess.file_exists(SAVE_BACKUP_PATH):
         _fail("backup save was not created")
@@ -32,7 +34,7 @@ func _init() -> void:
     if not second._v07_load_city():
         _fail("current save did not reload")
         return
-    if int(second.cash) != 556 or int(second.v08_goal_stage) != 2:
+    if int(second.cash) != 556 or int(second.v08_goal_stage) != 2 or int(second.v09_policy) != 3:
         _fail("current save restored wrong state")
         return
 
@@ -48,7 +50,7 @@ func _init() -> void:
     if not recovered._v07_load_city():
         _fail("backup recovery failed")
         return
-    if int(recovered.cash) != 555 or int(recovered.v08_goal_stage) != 2:
+    if int(recovered.cash) != 555 or int(recovered.v08_goal_stage) != 2 or int(recovered.v09_policy) != 1:
         _fail("backup recovery restored wrong state")
         return
 
@@ -57,8 +59,8 @@ func _init() -> void:
     if not repaired._v07_load_city():
         _fail("repaired main save did not reload")
         return
-    if int(repaired.cash) != 555:
-        _fail("repaired main save has wrong cash")
+    if int(repaired.cash) != 555 or int(repaired.v09_policy) != 1:
+        _fail("repaired main save has wrong state")
         return
 
     _cleanup()
