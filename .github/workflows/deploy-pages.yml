@@ -86,6 +86,12 @@ jobs:
             exit 1
           fi
 
+      - name: Demand model fixture
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/demand_model_test.gd
+
       - name: 3D renderer fixture
         shell: bash
         run: |
