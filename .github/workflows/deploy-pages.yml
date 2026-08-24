@@ -110,6 +110,12 @@ jobs:
           set -euxo pipefail
           godot --headless --path . --script res://tests/service_model_test.gd
 
+      - name: Progression model fixture
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/progression_model_test.gd
+
       - name: 3D renderer fixture
         shell: bash
         run: |

@@ -17,6 +17,8 @@ func _init() -> void:
     first.cash = 555
     first.v08_goal_stage = 2
     first.v09_policy = 1
+    first.city_level = 5
+    first.unlocked_cols = 16
     first.v18_mobility = true
     first.v18_green = true
     first._v07_save_city()
@@ -26,6 +28,8 @@ func _init() -> void:
 
     first.cash = 556
     first.v09_policy = 3
+    first.city_level = 6
+    first.unlocked_cols = 16
     first.v18_mobility = false
     first.v18_green = false
     first.v18_education = true
@@ -42,6 +46,9 @@ func _init() -> void:
         return
     if int(second.cash) != 556 or int(second.v08_goal_stage) != 2 or int(second.v09_policy) != 3:
         _fail("current save restored wrong base state")
+        return
+    if int(second.city_level) != 6 or int(second.unlocked_cols) != 16:
+        _fail("current save restored wrong progression state")
         return
     if bool(second.v18_mobility) or bool(second.v18_green) or not bool(second.v18_education) or not bool(second.v18_safety):
         _fail("current save restored wrong service state")
@@ -62,6 +69,9 @@ func _init() -> void:
     if int(recovered.cash) != 555 or int(recovered.v08_goal_stage) != 2 or int(recovered.v09_policy) != 1:
         _fail("backup recovery restored wrong base state")
         return
+    if int(recovered.city_level) != 5 or int(recovered.unlocked_cols) != 16:
+        _fail("backup recovery restored wrong progression state")
+        return
     if not bool(recovered.v18_mobility) or not bool(recovered.v18_green) or bool(recovered.v18_education) or bool(recovered.v18_safety):
         _fail("backup recovery restored wrong service state")
         return
@@ -73,6 +83,9 @@ func _init() -> void:
         return
     if int(repaired.cash) != 555 or int(repaired.v09_policy) != 1:
         _fail("repaired main save has wrong state")
+        return
+    if int(repaired.city_level) != 5 or int(repaired.unlocked_cols) != 16:
+        _fail("repaired main save lost progression state")
         return
     if not bool(repaired.v18_mobility) or not bool(repaired.v18_green):
         _fail("repaired main save lost service state")
