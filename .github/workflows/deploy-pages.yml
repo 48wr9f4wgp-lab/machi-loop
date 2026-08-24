@@ -61,6 +61,12 @@ jobs:
             exit 1
           fi
 
+      - name: Save safety fixture
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/save_fixture_test.gd
+
       - name: Export Godot Web build
         shell: bash
         run: |
