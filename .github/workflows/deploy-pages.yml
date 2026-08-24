@@ -86,6 +86,12 @@ jobs:
             exit 1
           fi
 
+      - name: 3D renderer fixture
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/render_fixture_test.gd
+
       - name: Save safety fixture
         shell: bash
         run: |
