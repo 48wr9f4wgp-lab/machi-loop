@@ -104,6 +104,12 @@ jobs:
           set -euxo pipefail
           godot --headless --path . --script res://tests/economy_model_test.gd
 
+      - name: Service model fixture
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/service_model_test.gd
+
       - name: 3D renderer fixture
         shell: bash
         run: |
