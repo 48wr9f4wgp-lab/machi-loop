@@ -128,6 +128,12 @@ jobs:
           set -euxo pipefail
           godot --headless --path . --script res://tests/ftue_persistence_test.gd
 
+      - name: Production asset catalog fixture
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/asset_catalog_test.gd
+
       - name: 3D renderer fixture
         shell: bash
         run: |
