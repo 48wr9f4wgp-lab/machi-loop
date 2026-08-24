@@ -1,1 +1,1 @@
-extends "res://main_mobile.gd"
+extends "res://main_v04.gd"
