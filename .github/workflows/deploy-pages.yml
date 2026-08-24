@@ -140,6 +140,18 @@ jobs:
           set -euxo pipefail
           godot --headless --path . --script res://tests/save_fixture_test.gd
 
+      - name: Legacy save migration fixture
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/legacy_save_migration_test.gd
+
+      - name: Functional Build regression gate
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/functional_build_regression_test.gd
+
       - name: Export Godot Web build
         shell: bash
         run: |
