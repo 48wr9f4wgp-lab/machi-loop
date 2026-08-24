@@ -1,4 +1,3 @@
-class_name DemandModel
 extends RefCounted
 
 # Pure demand calculation for MACHI LOOP Functional Build.
