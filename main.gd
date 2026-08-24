@@ -63,10 +63,10 @@ func _init_grid() -> void:
 
 func _reflow() -> void:
     var size := get_viewport_rect().size
-    var usable_w := max(320.0, size.x - MARGIN * 2.0)
-    var usable_h := max(220.0, size.y - TOP_H - BOTTOM_H - MARGIN)
-    cell_size = floor(min(usable_w / GRID_W, usable_h / GRID_H))
-    cell_size = max(cell_size, 20.0)
+    var usable_w: float = maxf(320.0, size.x - MARGIN * 2.0)
+    var usable_h: float = maxf(220.0, size.y - TOP_H - BOTTOM_H - MARGIN)
+    cell_size = floorf(minf(usable_w / GRID_W, usable_h / GRID_H))
+    cell_size = maxf(cell_size, 20.0)
     var board_size := Vector2(cell_size * GRID_W, cell_size * GRID_H)
     board_origin = Vector2((size.x - board_size.x) * 0.5, TOP_H + 8.0)
     board_rect = Rect2(board_origin, board_size)
@@ -76,10 +76,10 @@ func _reflow() -> void:
 func _layout_tools(size: Vector2) -> void:
     tool_rects.clear()
     var gap := 10.0
-    var button_w := min(190.0, (size.x - MARGIN * 2.0 - gap * 3.0) / 4.0)
+    var button_w: float = minf(190.0, (size.x - MARGIN * 2.0 - gap * 3.0) / 4.0)
     var button_h := 54.0
-    var total_w := button_w * 4.0 + gap * 3.0
-    var x0 := (size.x - total_w) * 0.5
+    var total_w: float = button_w * 4.0 + gap * 3.0
+    var x0: float = (size.x - total_w) * 0.5
     var y := size.y - BOTTOM_H + 18.0
     tool_rects[Tool.ROAD] = Rect2(x0, y, button_w, button_h)
     tool_rects[Tool.WIDEN] = Rect2(x0 + (button_w + gap), y, button_w, button_h)
@@ -152,14 +152,14 @@ func _draw_cell_detail(p: Vector2i, rect: Rect2) -> void:
         var road_w := rect.size.x * (0.34 if cell == Cell.LOCAL else 0.52)
         var road_rect := Rect2(center - Vector2(road_w, road_w) * 0.5, Vector2(road_w, road_w))
         var load := _road_load(p)
-        var heat := clamp(load / _road_capacity(p), 0.0, 1.5)
+        var heat: float = clampf(load / _road_capacity(p), 0.0, 1.5)
         if heat > 0.85:
-            draw_circle(center, road_w * 0.48, Color(0.95, 0.36, 0.22, min(0.65, heat * 0.45)))
+            draw_circle(center, road_w * 0.48, Color(0.95, 0.36, 0.22, minf(0.65, heat * 0.45)))
         draw_rect(road_rect, Color("#333A38" if cell == Cell.ARTERIAL else "#626B68"))
         if cell == Cell.ARTERIAL:
-            draw_line(Vector2(center.x - road_w * 0.36, center.y), Vector2(center.x + road_w * 0.36, center.y), Color("#F1D078"), max(1.0, cell_size * 0.045))
+            draw_line(Vector2(center.x - road_w * 0.36, center.y), Vector2(center.x + road_w * 0.36, center.y), Color("#F1D078"), maxf(1.0, cell_size * 0.045))
         if widened.has(_key(p)):
-            draw_rect(rect.grow(-cell_size * 0.12), Color("#8DE0CE"), false, max(2.0, cell_size * 0.06))
+            draw_rect(rect.grow(-cell_size * 0.12), Color("#8DE0CE"), false, maxf(2.0, cell_size * 0.06))
         return
 
     if cell in [Cell.RESIDENTIAL, Cell.COMMERCIAL, Cell.INDUSTRIAL]:
@@ -171,7 +171,7 @@ func _draw_cell_detail(p: Vector2i, rect: Rect2) -> void:
             building_color = Color("#E7D5B7")
         draw_rect(inset, building_color)
         draw_rect(inset, Color(0.15,0.20,0.18,0.22), false, 1.0)
-        var roof_h := max(2.0, cell_size * 0.10)
+        var roof_h: float = maxf(2.0, cell_size * 0.10)
         draw_rect(Rect2(inset.position, Vector2(inset.size.x, roof_h)), Color(0.2,0.28,0.24,0.30))
 
 func _draw_drag_preview() -> void:
@@ -180,7 +180,7 @@ func _draw_drag_preview() -> void:
     for p in drag_path:
         if _in_bounds(p) and p.x < unlocked_cols:
             var rect := _cell_rect(p).grow(-cell_size * 0.10)
-            var valid := grid[p.y][p.x] in [Cell.EMPTY, Cell.ARTERIAL]
+            var valid: bool = grid[p.y][p.x] in [Cell.EMPTY, Cell.ARTERIAL]
             draw_rect(rect, Color(0.20, 0.78, 0.66, 0.48) if valid else Color(0.92, 0.28, 0.20, 0.45))
 
 func _draw_toolbar() -> void:
@@ -193,7 +193,7 @@ func _draw_toolbar() -> void:
     }
     for id in tool_rects.keys():
         var rect: Rect2 = tool_rects[id]
-        var active := (id == current_tool and id != 99)
+        var active: bool = id == current_tool and id != 99
         var bg := Color("#20352D") if active else Color("#F8FAF5")
         var fg := Color.WHITE if active else Color("#20352D")
         draw_rect(rect, bg)
@@ -202,7 +202,7 @@ func _draw_toolbar() -> void:
 
 func _draw_banner(size: Vector2) -> void:
     var font := ThemeDB.fallback_font
-    var w := min(size.x - 40.0, 560.0)
+    var w: float = minf(size.x - 40.0, 560.0)
     var rect := Rect2((size.x - w) * 0.5, TOP_H + 16.0, w, 46.0)
     draw_rect(rect, Color(0.08, 0.13, 0.11, 0.88))
     draw_string(font, rect.position + Vector2(0, 30), banner, HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 17, Color.WHITE)
@@ -308,7 +308,7 @@ func _bulldoze(p: Vector2i) -> void:
     if c == Cell.ARTERIAL:
         widened.erase(_key(p))
     grid[p.y][p.x] = Cell.EMPTY
-    cash = max(0, cash - 8)
+    cash = maxi(0, cash - 8)
     _toast("撤去 -¥8")
     _recalculate_city()
 
@@ -354,7 +354,7 @@ func _auto_generate_local_roads() -> void:
 func _auto_grow_buildings() -> void:
     if _all_road_cells().is_empty():
         return
-    var growth_chance := 0.54 * clamp(1.20 - congestion / 120.0, 0.18, 1.0)
+    var growth_chance: float = 0.54 * clampf(1.20 - congestion / 120.0, 0.18, 1.0)
     if rng.randf() > growth_chance:
         return
 
@@ -394,15 +394,14 @@ func _recalculate_city() -> void:
     population = homes * 13
     jobs = commerce * 8 + industry * 11
 
-    var road_cells := max(1, _all_road_cells().size())
     var total_capacity := 0.0
     for p in _all_road_cells():
         total_capacity += _road_capacity(p)
     var trips := population * 0.72 + jobs * 0.32
-    congestion = clamp((trips / max(1.0, total_capacity)) * 100.0, 0.0, 160.0)
+    congestion = clampf((trips / maxf(1.0, total_capacity)) * 100.0, 0.0, 160.0)
 
-    var job_ratio := min(1.0, float(jobs + 10) / float(max(population, 1)))
-    happiness = int(clamp(100.0 - max(0.0, congestion - 45.0) * 0.62 - abs(0.72 - job_ratio) * 22.0, 35.0, 100.0))
+    var job_ratio: float = minf(1.0, float(jobs + 10) / float(maxi(population, 1)))
+    happiness = int(clampf(100.0 - maxf(0.0, congestion - 45.0) * 0.62 - absf(0.72 - job_ratio) * 22.0, 35.0, 100.0))
     tax_income = int(population * 0.08 + jobs * 0.05)
 
 func _check_unlocks() -> void:
@@ -426,7 +425,7 @@ func _check_unlocks() -> void:
 func _road_load(p: Vector2i) -> float:
     var load := 0.0
     for d in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]:
-        var q := p + d
+        var q: Vector2i = p + d
         if not _in_bounds(q):
             continue
         match grid[q.y][q.x]:
@@ -464,7 +463,7 @@ func _count_cells(kind: int) -> int:
 func _adjacent_road_count(p: Vector2i) -> int:
     var n := 0
     for d in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]:
-        var q := p + d
+        var q: Vector2i = p + d
         if _in_bounds(q) and grid[q.y][q.x] in [Cell.ARTERIAL, Cell.LOCAL]:
             n += 1
     return n
@@ -474,7 +473,7 @@ func _distance_to_arterial(p: Vector2i) -> int:
     for y in GRID_H:
         for x in unlocked_cols:
             if grid[y][x] == Cell.ARTERIAL:
-                best = min(best, abs(p.x - x) + abs(p.y - y))
+                best = mini(best, absi(p.x - x) + absi(p.y - y))
     return best
 
 func _screen_to_cell(pos: Vector2) -> Vector2i:
@@ -494,20 +493,20 @@ func _key(p: Vector2i) -> String:
 
 func _grid_line(a: Vector2i, b: Vector2i) -> Array:
     var points := []
-    var x0 := a.x
-    var y0 := a.y
-    var x1 := b.x
-    var y1 := b.y
-    var dx := abs(x1 - x0)
-    var sx := 1 if x0 < x1 else -1
-    var dy := -abs(y1 - y0)
-    var sy := 1 if y0 < y1 else -1
-    var err := dx + dy
+    var x0: int = a.x
+    var y0: int = a.y
+    var x1: int = b.x
+    var y1: int = b.y
+    var dx: int = absi(x1 - x0)
+    var sx: int = 1 if x0 < x1 else -1
+    var dy: int = -absi(y1 - y0)
+    var sy: int = 1 if y0 < y1 else -1
+    var err: int = dx + dy
     while true:
         points.append(Vector2i(x0, y0))
         if x0 == x1 and y0 == y1:
             break
-        var e2 := 2 * err
+        var e2: int = 2 * err
         if e2 >= dy:
             err += dy
             x0 += sx
