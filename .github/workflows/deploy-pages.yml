@@ -92,6 +92,12 @@ jobs:
           set -euxo pipefail
           godot --headless --path . --script res://tests/demand_model_test.gd
 
+      - name: Traffic model fixture
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/traffic_model_test.gd
+
       - name: 3D renderer fixture
         shell: bash
         run: |
