@@ -14,10 +14,6 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
-env:
-  GODOT_VERSION: "4.7.2"
-  GODOT_STATUS: "stable"
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,61 +21,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Download Godot editor
-        shell: bash
-        run: |
-          set -euxo pipefail
-          curl -L --fail --retry 3 \
-            "https://downloads.godotengine.org/?flavor=stable&platform=linux.64&slug=linux.x86_64.zip&version=${GODOT_VERSION}" \
-            -o /tmp/godot.zip
-          mkdir -p /tmp/godot
-          unzip -q /tmp/godot.zip -d /tmp/godot
-          GODOT_BIN="$(find /tmp/godot -maxdepth 1 -type f -name 'Godot_v*-stable_linux.x86_64' | head -n 1)"
-          test -n "$GODOT_BIN"
-          chmod +x "$GODOT_BIN"
-          echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
+      - name: Export Godot Web build
+        id: export
+        uses: firebelley/godot-export@v8.0.0
+        with:
+          godot_executable_download_url: https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+          godot_export_templates_download_url: https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz
+          relative_project_path: ./
+          use_preset_export_path: true
+          presets_to_export: Web
+          cache: true
+          verbose: true
 
-      - name: Install matching export templates
+      - name: Verify Web build
         shell: bash
         run: |
           set -euxo pipefail
-          curl -L --fail --retry 3 \
-            "https://downloads.godotengine.org/?flavor=stable&platform=templates&slug=export_templates.tpz&version=${GODOT_VERSION}" \
-            -o /tmp/templates.tpz
-          rm -rf /tmp/godot_templates
-          mkdir -p /tmp/godot_templates
-          unzip -q /tmp/templates.tpz -d /tmp/godot_templates
-          TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_STATUS}"
-          mkdir -p "$TEMPLATE_DIR"
-          if [ -d /tmp/godot_templates/templates ]; then
-            cp -a /tmp/godot_templates/templates/. "$TEMPLATE_DIR/"
-          else
-            cp -a /tmp/godot_templates/. "$TEMPLATE_DIR/"
-          fi
-          test -f "$TEMPLATE_DIR/web_release.zip"
-
-      - name: Import project and verify scripts
-        shell: bash
-        run: |
-          set -euxo pipefail
-          "$GODOT_BIN" --headless --path . --import
-          "$GODOT_BIN" --headless --path . --editor --quit-after 2
-
-      - name: Export Web build
-        shell: bash
-        run: |
-          set -euxo pipefail
-          mkdir -p build/web
-          "$GODOT_BIN" --headless --path . --export-release "Web" build/web/index.html
           test -f build/web/index.html
           test -n "$(find build/web -maxdepth 1 -name '*.wasm' -print -quit)"
-          touch build/web/.nojekyll
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: build/web
 
