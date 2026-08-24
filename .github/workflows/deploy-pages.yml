@@ -71,6 +71,54 @@ jobs:
           touch build/web/.nojekyll
           printf '%s\n' "$GITHUB_SHA" > build/web/build.txt
 
+      - name: Prepare iPhone standalone shell
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cat > /tmp/machi_head.html <<'EOF'
+          <meta name="apple-mobile-web-app-capable" content="yes">
+          <meta name="mobile-web-app-capable" content="yes">
+          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+          <meta name="apple-mobile-web-app-title" content="MACHI LOOP">
+          <meta name="theme-color" content="#17251F">
+          <link rel="manifest" href="manifest.webmanifest">
+          <script>
+          (async function () {
+            try {
+              const response = await fetch('./build.txt?t=' + Date.now(), {cache: 'no-store'});
+              const build = (await response.text()).trim();
+              const url = new URL(window.location.href);
+              if (build && url.searchParams.get('build') !== build) {
+                url.searchParams.set('build', build);
+                window.location.replace(url.toString());
+              }
+            } catch (_) {}
+          })();
+          </script>
+          EOF
+
+          if ! grep -q 'apple-mobile-web-app-capable' build/web/index.html; then
+            awk '
+              BEGIN {
+                extra="";
+                while ((getline line < "/tmp/machi_head.html") > 0) extra = extra line ORS;
+                close("/tmp/machi_head.html");
+                done=0;
+              }
+              /<\/head>/ && !done { printf "%s", extra; done=1 }
+              { print }
+            ' build/web/index.html > build/web/index.html.tmp
+            mv build/web/index.html.tmp build/web/index.html
+          fi
+
+          if ! grep -q 'viewport-fit=cover' build/web/index.html; then
+            sed -i 's/user-scalable=no/user-scalable=no, viewport-fit=cover/' build/web/index.html
+          fi
+
+          cat > build/web/manifest.webmanifest <<'EOF'
+          {"name":"MACHI LOOP","short_name":"MACHI LOOP","start_url":"./","scope":"./","display":"standalone","orientation":"portrait","background_color":"#17251F","theme_color":"#17251F"}
+          EOF
+
       - name: Verify Web build
         shell: bash
         run: |
@@ -78,6 +126,9 @@ jobs:
           test -f build/web/index.html
           test -n "$(find build/web -maxdepth 1 -name '*.wasm' -print -quit)"
           test -f build/web/build.txt
+          test -f build/web/manifest.webmanifest
+          grep -q 'apple-mobile-web-app-capable' build/web/index.html
+          grep -q 'viewport-fit=cover' build/web/index.html
 
       - name: Configure Pages
         if: github.event_name != 'pull_request'
