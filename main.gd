@@ -1,1 +1,1 @@
-extends "res://main_v20_ftue.gd"
+extends "res://main_v21_assets.gd"
