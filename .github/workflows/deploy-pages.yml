@@ -75,14 +75,7 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          import json
-
-          index = Path("build/web/index.html")
-          html = index.read_text(encoding="utf-8")
-
-          standalone = """
+          cat > /tmp/machi_head.html <<'EOF'
           <meta name="apple-mobile-web-app-capable" content="yes">
           <meta name="mobile-web-app-capable" content="yes">
           <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -102,29 +95,29 @@ jobs:
             } catch (_) {}
           })();
           </script>
-          """
+          EOF
 
-          if "apple-mobile-web-app-capable" not in html:
-              html = html.replace("</head>", standalone + "\n</head>")
-          if "viewport-fit=cover" not in html:
-              html = html.replace("user-scalable=no", "user-scalable=no, viewport-fit=cover")
-          index.write_text(html, encoding="utf-8")
+          if ! grep -q 'apple-mobile-web-app-capable' build/web/index.html; then
+            awk '
+              BEGIN {
+                extra="";
+                while ((getline line < "/tmp/machi_head.html") > 0) extra = extra line ORS;
+                close("/tmp/machi_head.html");
+                done=0;
+              }
+              /<\/head>/ && !done { printf "%s", extra; done=1 }
+              { print }
+            ' build/web/index.html > build/web/index.html.tmp
+            mv build/web/index.html.tmp build/web/index.html
+          fi
 
-          manifest = {
-              "name": "MACHI LOOP",
-              "short_name": "MACHI LOOP",
-              "start_url": "./",
-              "scope": "./",
-              "display": "standalone",
-              "orientation": "portrait",
-              "background_color": "#17251F",
-              "theme_color": "#17251F"
-          }
-          Path("build/web/manifest.webmanifest").write_text(
-              json.dumps(manifest, ensure_ascii=False, separators=(",", ":")),
-              encoding="utf-8"
-          )
-          PY
+          if ! grep -q 'viewport-fit=cover' build/web/index.html; then
+            sed -i 's/user-scalable=no/user-scalable=no, viewport-fit=cover/' build/web/index.html
+          fi
+
+          cat > build/web/manifest.webmanifest <<'EOF'
+          {"name":"MACHI LOOP","short_name":"MACHI LOOP","start_url":"./","scope":"./","display":"standalone","orientation":"portrait","background_color":"#17251F","theme_color":"#17251F"}
+          EOF
 
       - name: Verify Web build
         shell: bash
