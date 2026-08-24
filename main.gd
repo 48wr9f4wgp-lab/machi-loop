@@ -1,1 +1,1 @@
-extends "res://main_v08.gd"
+extends "res://main_v08_1.gd"
