@@ -40,8 +40,20 @@ func _run() -> void:
         _fail("camera center ray does not intersect ground in front")
         return
     var hit: Vector3 = ray_origin + ray_dir * t
-    if absf(hit.x) > 1.0 or absf(hit.z) > 1.0:
-        _fail("camera center ray misses city center: %s" % str(hit))
+
+    # v0.14 intentionally frames the currently unlocked/buildable district rather than
+    # the full 16-column map center. Assert that the center ray lands inside that active area.
+    var min_x: float = -float(game.GRID_W) * 0.5 - 0.5
+    var max_x: float = -float(game.GRID_W) * 0.5 + float(game.unlocked_cols) + 0.5
+    var min_z: float = -float(game.GRID_H) * 0.5 - 0.5
+    var max_z: float = float(game.GRID_H) * 0.5 + 0.5
+    if hit.x < min_x or hit.x > max_x or hit.z < min_z or hit.z > max_z:
+        _fail("camera center ray misses active district: %s bounds=[%.2f..%.2f, %.2f..%.2f]" % [str(hit), min_x, max_x, min_z, max_z])
+        return
+
+    var expected_x: float = -float(game.GRID_W) * 0.5 + float(game.unlocked_cols) * 0.5
+    if absf(hit.x - expected_x) > 1.5:
+        _fail("camera framing is not centered on active district: %s expected_x=%.2f" % [str(hit), expected_x])
         return
 
     print("RENDER_FIXTURE_OK ray=%s hit=%s geometry=%d" % [str(ray_dir), str(hit), game.v10_static_root.get_child_count()])
