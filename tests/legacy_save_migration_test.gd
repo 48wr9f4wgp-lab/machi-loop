@@ -1,5 +1,6 @@
 extends SceneTree
 
+const ProgressionModel = preload("res://domain/progression_model.gd")
 const SAVE_PATH: String = "user://machi_loop_save_v1.json"
 const SAVE_TEMP: String = "user://machi_loop_save_v1.tmp"
 const SAVE_BACKUP: String = "user://machi_loop_save_v1.backup.json"
@@ -32,7 +33,7 @@ func _init() -> void:
     _require(int(current.city_level) >= 4, "city tier regressed during migration")
     _require(int(current.unlocked_cols) == 16, "land unlock regressed during migration")
     _require(int(current.v09_policy) == 2, "policy changed during migration")
-    _require(int(current._v19_active_service_count()) <= int(current.ProgressionModel.service_slots(current.city_level)), "legacy services violate new slot cap")
+    _require(int(current._v19_active_service_count()) <= ProgressionModel.service_slots(int(current.city_level)), "legacy services violate new slot cap")
     _require(int(current._v20_load_ftue_stage()) == 4, "progressed legacy city should infer FTUE complete")
 
     current._v07_save_city()
