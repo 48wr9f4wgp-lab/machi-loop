@@ -1,8 +1,7 @@
 # MACHI LOOP — GDD v1.0
 
-Status: Canonical game-specific GDD for Functional Build
+Status: Functional-Build baseline
 Date: 2026-08-24
-Supersedes: GDD v0.1
 
 ## 1. Game concept
 MACHI LOOP is a portrait 3D city-management game built around one deliberate simplification: the player lays strategic main roads, while the city automatically creates local roads and ordinary development around them.
