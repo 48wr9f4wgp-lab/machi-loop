@@ -1,5 +1,5 @@
 ; Engine configuration file.
-; MACHI LOOP vertical slice 0.2 — mobile web deployment
+; MACHI LOOP vertical slice 0.3 — portrait-first mobile web
 config_version=5
 
 [application]
@@ -7,12 +7,13 @@ config/name="MACHI LOOP"
 run/main_scene="res://main.tscn"
 
 [display]
-window/size/viewport_width=1280
-window/size/viewport_height=720
-window/size/window_width_override=1280
-window/size/window_height_override=720
+window/size/viewport_width=430
+window/size/viewport_height=932
+window/size/window_width_override=430
+window/size/window_height_override=932
 window/stretch/mode="canvas_items"
-window/handheld/orientation=0
+window/stretch/aspect="expand"
+window/handheld/orientation=1
 
 [rendering]
 renderer/rendering_method="gl_compatibility"
