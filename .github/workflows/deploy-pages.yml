@@ -55,7 +55,7 @@ jobs:
           FONT_SRC="$(fc-match 'Noto Sans CJK JP' -f '%{file}\n' | head -n 1)"
           test -n "$FONT_SRC"
           test -f "$FONT_SRC"
-          pyftsubset "$FONT_SRC" \
+          python3 -m fontTools.subset "$FONT_SRC" \
             --font-number=0 \
             --text-file=assets/jp_charset.txt \
             --output-file=generated/MachiLoopJP.otf \
