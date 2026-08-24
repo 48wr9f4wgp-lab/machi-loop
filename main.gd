@@ -1,1 +1,1 @@
-extends "res://main_v16_traffic.gd"
+extends "res://main_v17_economy.gd"
