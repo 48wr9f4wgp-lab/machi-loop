@@ -1,1 +1,1 @@
-extends "res://main_v10.gd"
+extends "res://main_v11_ja.gd"
