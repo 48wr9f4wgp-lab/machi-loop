@@ -1,1 +1,1 @@
-extends "res://main_v19_release.gd"
+extends "res://main_v20_ftue.gd"
