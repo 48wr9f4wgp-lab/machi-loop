@@ -70,8 +70,10 @@ PII_PROPERTY_PATTERNS = {
 }
 
 ALLOWED_ABSOLUTE_PATH_FILES = {
-    # Documentation may explain generic platform paths. Add explicit entries only
-    # when a checked-in file truly needs them; do not broadly suppress the rule.
+    # This audit contains the generic path-detection regexes themselves, so only
+    # its own source is exempt from this single check. Secrets/signing-file checks
+    # still apply to it like every other repository file.
+    "tools/release_readiness_audit.py",
 }
 
 
