@@ -2,6 +2,7 @@
 
 Status: Resume-safe handoff while Codex capacity is unavailable
 Created: 2026-08-26
+Updated: 2026-08-26 after outage-safe v0.22B work
 Remote canonical repository: `48wr9f4wgp-lab/machi-loop`
 Remote baseline observed when this packet was created: `main` at `1065b4f9337cfff47b088c9884c1bef8f3001f54`
 
@@ -93,22 +94,61 @@ Required order:
 
 ## 6. Changes intentionally allowed during Codex outage
 
-Remote work during the outage is limited to non-conflicting planning/documentation on separate branches, especially:
-- v0.22B analytics event dictionary
-- performance measurement/budget specification
+Remote work during the outage is limited to non-conflicting planning/documentation and isolated new modules on separate branches, especially:
+- v0.22B analytics event dictionary/foundation
+- performance measurement/budget/foundation
 - native packaging checklist
+- production Audio/Haptics quality target
 - future Codex Task Packets
 
 No remote code should touch the reserved v0.22A paths until the Merge Gate is complete.
 
+### Outage branches / PRs created
+
+All of the following remain **draft/unmerged** so `main` stays at the original shared baseline while Codex local v0.22A is recovered:
+
+1. PR #29 — `docs/v022b-planning`
+   - Resume Packet
+   - Analytics Event Dictionary
+   - Performance Budget
+   - Native Export Requirements (verified 2026-08-26)
+   - Production Audio/Haptics Plan
+   - latest observed head: `f64782d1ec920c0a5c4ecd9d8ac33e10ecf5e8ca`
+
+2. PR #30 — `feat/analytics-foundation-v022b`
+   - versioned analytics event schema
+   - strict property/type/enum validation
+   - explicit forbidden PII keys
+   - default no-network/no-disk adapter
+   - analytics controller with common context and one-per-session performance-summary guard
+   - dedicated Analytics CI: green
+   - existing full MACHI LOOP CI: green
+   - latest observed head: `073e0599891d82106f705aebf6939909521be084`
+
+3. PR #31 — `feat/performance-foundation-v022b`
+   - P0–P5 named performance states
+   - bounded 1200-frame rolling monitor
+   - avg/p95/worst frame metrics
+   - slow-frame rate
+   - sustained sub-30fps hard-regression detector
+   - >=100 ms critical input-stall detector
+   - analytics-ready performance bands
+   - dedicated Performance CI: green
+   - existing full MACHI LOOP CI: green
+   - latest observed head: `0f53e63e9fbc5cb00d46ebbd69b59e84b748855d`
+
+These branches should be reviewed/rebased only **after** v0.22A is safely committed/pushed and its Merge Gate is complete. Do not reimplement their contents in the Codex local v0.22A branch.
+
 ## 7. Queued next work
 
 After v0.22A is safely merged and deployed:
-1. Real-device performance instrumentation and baselines
-2. Privacy-minimal analytics adapter/event dictionary implementation
-3. Native Android/iOS export configuration
-4. Android permission + real-device haptics validation
-5. iPhone native haptics validation
-6. SFX subjective tuning on device
+1. Rebase/review PR #29, #30, and #31 against the new main; merge only if still valid.
+2. Connect the AnalyticsController to meaningful game events; keep provider no-op until separately approved.
+3. Connect PerformanceMonitor to runtime frame/startup/interaction measurement and deterministic P1/P3/P5 states.
+4. Capture real-device performance baselines before optimization.
+5. Add Android native export configuration targeting the then-current Play requirement (API 36 baseline as of 2026-08-26).
+6. Validate Android permission + real-device haptics.
+7. Prepare iOS export, then build/test on macOS/Xcode and physical iPhone.
+8. Tune/replace placeholder SFX based on real speaker/headphone listening.
 
 Do not start RC-wide performance optimization or large refactors until actual device telemetry identifies a bottleneck.
