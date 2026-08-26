@@ -19,6 +19,9 @@ jobs:
       - name: Python version
         run: python3 --version
 
+      - name: Syntax-check release tools
+        run: python3 -m py_compile tools/release_readiness_audit.py tools/native_preflight.py
+
       - name: Release readiness audit
         run: python3 tools/release_readiness_audit.py
 
@@ -39,4 +42,6 @@ jobs:
           test -f docs/PRODUCT_LOCK_V1.md
           test -f docs/SUCCESS_DEFINITION_V1.md
           test -f docs/ART_BIBLE_3D_PRODUCTION_V021.md
+          test -f docs/FINAL_AUDIT_SCORECARD_V1.md
+          test -f docs/QA_MATRIX_V1.md
           echo DOCUMENT_BASELINE_OK
