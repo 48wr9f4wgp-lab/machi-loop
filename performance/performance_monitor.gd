@@ -14,7 +14,7 @@ var geometry_count: int = -1
 var city_tier: int = 1
 
 var _frame_ms: Array = []
-var _elapsed_sec: float = 0.0
+var _window_elapsed_sec: float = 0.0
 var _slow_frame_count: int = 0
 var _current_below_30_sec: float = 0.0
 var _max_below_30_sec: float = 0.0
@@ -28,7 +28,7 @@ func begin(sample_state: String, measured_startup_ms: int = -1, measured_geometr
     geometry_count = measured_geometry_count
     city_tier = measured_city_tier
     _frame_ms.clear()
-    _elapsed_sec = 0.0
+    _window_elapsed_sec = 0.0
     _slow_frame_count = 0
     _current_below_30_sec = 0.0
     _max_below_30_sec = 0.0
@@ -40,11 +40,16 @@ func sample_frame(delta_sec: float) -> void:
         return
     var frame_ms: float = delta_sec * 1000.0
     _frame_ms.append(frame_ms)
-    if _frame_ms.size() > MAX_FRAME_SAMPLES:
-        _frame_ms.pop_front()
-    _elapsed_sec += delta_sec
+    _window_elapsed_sec += delta_sec
     if frame_ms > SLOW_FRAME_MS:
         _slow_frame_count += 1
+
+    if _frame_ms.size() > MAX_FRAME_SAMPLES:
+        var removed_ms: float = float(_frame_ms.pop_front())
+        _window_elapsed_sec = maxf(0.0, _window_elapsed_sec - removed_ms / 1000.0)
+        if removed_ms > SLOW_FRAME_MS:
+            _slow_frame_count = maxi(0, _slow_frame_count - 1)
+
     if frame_ms >= BELOW_30_FRAME_MS:
         _current_below_30_sec += delta_sec
         _max_below_30_sec = maxf(_max_below_30_sec, _current_below_30_sec)
@@ -91,7 +96,7 @@ func snapshot() -> Dictionary:
     return {
         "state": state_name,
         "sample_count": _frame_ms.size(),
-        "sample_window_sec": int(round(_elapsed_sec)),
+        "sample_window_sec": int(round(_window_elapsed_sec)),
         "avg_fps": avg_fps,
         "avg_frame_ms": avg_ms,
         "p95_frame_ms": p95_ms,
