@@ -1,0 +1,34 @@
+name: Visual world pass checks
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "main_v21_visual_pass2.gd"
+      - "tests/visual_world_pass_test.gd"
+      - ".github/workflows/visual-world-pass.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  visual-world-pass:
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.7.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Godot version
+        run: godot --version
+
+      - name: Validate project
+        run: godot --headless --editor --path . --quit-after 1
+
+      - name: Visual world fixture
+        run: godot --headless --path . --script res://tests/visual_world_pass_test.gd
+
+      - name: Existing renderer regression
+        run: godot --headless --path . --script res://tests/render_fixture_test.gd
