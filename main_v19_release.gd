@@ -3,6 +3,47 @@ extends "res://main_v19_progression.gd"
 # v0.19 release guard — normalize migrated progression/service state.
 # This keeps pre-v0.19 saves valid while enforcing the six-tier rules immediately after load.
 
+func _v08_apply_payload(data: Dictionary, legacy: bool) -> bool:
+    # Checksum protects byte integrity, but a previously buggy build or manually
+    # rewritten envelope can still contain semantically impossible cell values.
+    # Reject those states so the existing loader can fall back to the backup.
+    var grid_variant: Variant = data.get("grid", [])
+    if not grid_variant is Array:
+        return false
+    var saved_grid: Array = grid_variant as Array
+    if saved_grid.size() != GRID_H:
+        return false
+    for y: int in range(GRID_H):
+        var row_variant: Variant = saved_grid[y]
+        if not row_variant is Array:
+            return false
+        var row: Array = row_variant as Array
+        if row.size() != GRID_W:
+            return false
+        for x: int in range(GRID_W):
+            var cell_value: int = int(row[x])
+            if cell_value < Cell.EMPTY or cell_value > Cell.INDUSTRIAL:
+                return false
+
+    if not super._v08_apply_payload(data, legacy):
+        return false
+
+    # Stale widen flags are harmless but should not survive migration/recovery.
+    # Keep only true flags pointing at an in-bounds arterial cell.
+    var normalized_widened: Dictionary = {}
+    for key_variant: Variant in widened.keys():
+        var key: String = str(key_variant)
+        if not bool(widened[key_variant]):
+            continue
+        var parts: PackedStringArray = key.split(":")
+        if parts.size() != 2 or not parts[0].is_valid_int() or not parts[1].is_valid_int():
+            continue
+        var p: Vector2i = Vector2i(parts[0].to_int(), parts[1].to_int())
+        if _in_bounds(p) and int(grid[p.y][p.x]) == Cell.ARTERIAL:
+            normalized_widened[key] = true
+    widened = normalized_widened
+    return true
+
 func _v19_load_from_path(path: String) -> bool:
     var loaded: bool = super._v19_load_from_path(path)
     if not loaded:
