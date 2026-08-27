@@ -3,11 +3,31 @@ extends SceneTree
 const Controller = preload("res://observability/observability_controller.gd")
 const NoopCrashReporter = preload("res://observability/noop_crash_reporter.gd")
 
+class CaptureReporter:
+    extends RefCounted
+    var sent_events: Array[Dictionary] = []
+
+    func provider_name() -> String:
+        return "capture"
+
+    func send_error(event: Dictionary) -> bool:
+        sent_events.append(event.duplicate(true))
+        return true
+
 func _init() -> void:
     call_deferred("_run")
 
 func _run() -> void:
-    var reporter: RefCounted = NoopCrashReporter.new()
+    # The production/default no-op reporter must be stateless and safe.
+    var noop: RefCounted = NoopCrashReporter.new()
+    if not bool(noop.call("send_error", {"code": "discard_me"})):
+        _fail("no-op reporter rejected a normalized event")
+        return
+    if noop.get_property_list().any(func(item: Dictionary) -> bool: return String(item.get("name", "")) == "sent_events"):
+        _fail("no-op reporter must not retain sent events")
+        return
+
+    var reporter: CaptureReporter = CaptureReporter.new()
     var controller: RefCounted = Controller.new(reporter)
 
     if not controller.record_breadcrumb("arterial_commit", {"city_tier": 2, "stage": "play"}):
@@ -48,7 +68,7 @@ func _run() -> void:
         _fail("secret-bearing report accepted")
         return
 
-    var events: Array[Dictionary] = reporter.get("sent_events")
+    var events: Array[Dictionary] = reporter.sent_events
     if events.size() != 1:
         _fail("expected exactly one accepted report, got %d" % events.size())
         return
