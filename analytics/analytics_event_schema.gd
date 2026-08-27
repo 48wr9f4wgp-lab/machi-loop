@@ -102,6 +102,7 @@ const ENUM_VALUES: Dictionary = {
     },
     "settings_change": {
         "key": ["sfx_enabled", "haptics_enabled"],
+        "value": ["true", "false"],
     },
     "save_recovered": {
         "source": ["backup", "default_fallback"],
