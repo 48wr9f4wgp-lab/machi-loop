@@ -1,12 +1,10 @@
 extends RefCounted
 
-var sent_events: Array[Dictionary] = []
+# Default reporter for development and provider-free builds.
+# Intentionally performs no network, disk, SDK, platform call, or event retention.
 
-func send_error(event: Dictionary) -> bool:
-    # Development default: accept the normalized event locally but perform no
-    # network, disk, SDK, or platform call. Tests may inspect sent_events.
-    sent_events.append(event.duplicate(true))
+func provider_name() -> String:
+    return "noop"
+
+func send_error(_event: Dictionary) -> bool:
     return true
-
-func clear() -> void:
-    sent_events.clear()
