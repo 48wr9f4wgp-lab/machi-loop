@@ -38,6 +38,22 @@ static func is_safe_code(value: String) -> bool:
             return false
     return true
 
+static func is_safe_context_string(value: String) -> bool:
+    # Context strings are codes/versions, never free-form text. Keep the alphabet
+    # deliberately small so emails, file-system paths, stack text, and user-entered
+    # prose cannot be forwarded accidentally.
+    if value.is_empty() or value.length() > 64:
+        return false
+    for index: int in range(value.length()):
+        var code: int = value.unicode_at(index)
+        var is_lower: bool = code >= 97 and code <= 122
+        var is_upper: bool = code >= 65 and code <= 90
+        var is_digit: bool = code >= 48 and code <= 57
+        var allowed_punctuation: bool = code in [45, 46, 95] # - . _
+        if not is_lower and not is_upper and not is_digit and not allowed_punctuation:
+            return false
+    return true
+
 static func sanitize_context(input: Dictionary) -> Dictionary:
     var output: Dictionary = {}
     for key_variant: Variant in input.keys():
@@ -47,7 +63,11 @@ static func sanitize_context(input: Dictionary) -> Dictionary:
         if key not in ALLOWED_CONTEXT_KEYS:
             continue
         var value: Variant = input[key_variant]
-        if value is String or value is int or value is float or value is bool:
+        if value is String:
+            var text: String = String(value)
+            if is_safe_context_string(text):
+                output[key] = text
+        elif value is int or value is float or value is bool:
             output[key] = value
     return output
 
