@@ -1,7 +1,24 @@
 extends "res://main_v19_progression.gd"
 
-# v0.19 release guard — normalize migrated progression/service state.
-# This keeps pre-v0.19 saves valid while enforcing the six-tier rules immediately after load.
+# v0.19 release guard — normalize migrated progression/service state and keep
+# presentation state coherent with the six-tier simulation rules.
+
+func _process(delta: float) -> void:
+    var city_time_before: float = v04_time
+    super._process(delta)
+    if paused:
+        # Pause represents the city clock. Freeze the animation clock used by
+        # vehicles/building growth so resume does not jump ahead visually.
+        v04_time = city_time_before
+        if is_instance_valid(v10_vehicle_root):
+            _v10_update_vehicles()
+
+func _v10_scene_hash() -> int:
+    # Production asset selection is tier-aware. Tiers 4 -> 5 -> 6 can change
+    # while unlocked_cols/grid stay unchanged, so city_level must participate in
+    # the signature or existing buildings can remain on an older asset tier.
+    var parent_hash: int = super._v10_scene_hash()
+    return (str(parent_hash) + "|tier:" + str(city_level)).hash()
 
 func _v08_apply_payload(data: Dictionary, legacy: bool) -> bool:
     # Checksum protects byte integrity, but a previously buggy build or manually
