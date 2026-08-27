@@ -3,6 +3,14 @@ extends "res://main_v19_progression.gd"
 # v0.19 release guard — normalize migrated progression/service state.
 # This keeps pre-v0.19 saves valid while enforcing the six-tier rules immediately after load.
 
+func _v10_scene_hash() -> int:
+    # Production asset selection is tier-aware. Once progression expanded beyond
+    # the old district unlocks, city_level can change while unlocked_cols and the
+    # grid remain unchanged (notably tiers 4 -> 5 -> 6). Include tier explicitly
+    # so existing buildings rebuild into the newly unlocked skyline kit immediately.
+    var parent_hash: int = super._v10_scene_hash()
+    return (str(parent_hash) + "|tier:" + str(city_level)).hash()
+
 func _v19_load_from_path(path: String) -> bool:
     var loaded: bool = super._v19_load_from_path(path)
     if not loaded:
