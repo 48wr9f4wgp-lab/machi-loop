@@ -1,4 +1,4 @@
-name: Save semantic validation checks
+name: Release guard hardening checks
 
 on:
   pull_request:
@@ -6,6 +6,8 @@ on:
     paths:
       - "main_v19_release.gd"
       - "tests/save_semantic_validation_test.gd"
+      - "tests/tier_render_signature_test.gd"
+      - "tests/pause_city_clock_test.gd"
       - ".github/workflows/save-semantic-validation.yml"
   workflow_dispatch:
 
@@ -13,7 +15,7 @@ permissions:
   contents: read
 
 jobs:
-  save-semantic-validation:
+  release-guards:
     runs-on: ubuntu-24.04
     container:
       image: barichello/godot-ci:4.7.1
@@ -26,3 +28,9 @@ jobs:
 
       - name: Semantic save fixture
         run: godot --headless --path . --script res://tests/save_semantic_validation_test.gd
+
+      - name: Tier render signature fixture
+        run: godot --headless --path . --script res://tests/tier_render_signature_test.gd
+
+      - name: Pause city clock fixture
+        run: godot --headless --path . --script res://tests/pause_city_clock_test.gd
