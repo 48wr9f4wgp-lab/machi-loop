@@ -38,11 +38,15 @@ func _init() -> void:
 
     var valid_setting: Dictionary = common.duplicate()
     valid_setting.merge({"key": "sfx_enabled", "value": "false"})
-    _check(bool(EventSchema.validate_event("settings_change", valid_setting).get("ok", false)), "allowed settings key rejected")
+    _check(bool(EventSchema.validate_event("settings_change", valid_setting).get("ok", false)), "allowed settings key/value rejected")
 
-    var invalid_setting: Dictionary = common.duplicate()
-    invalid_setting.merge({"key": "free_form_setting", "value": "anything"})
-    _check(not bool(EventSchema.validate_event("settings_change", invalid_setting).get("ok", true)), "arbitrary settings key accepted")
+    var invalid_setting_key: Dictionary = common.duplicate()
+    invalid_setting_key.merge({"key": "free_form_setting", "value": "true"})
+    _check(not bool(EventSchema.validate_event("settings_change", invalid_setting_key).get("ok", true)), "arbitrary settings key accepted")
+
+    var invalid_setting_value: Dictionary = common.duplicate()
+    invalid_setting_value.merge({"key": "haptics_enabled", "value": "free form user value"})
+    _check(not bool(EventSchema.validate_event("settings_change", invalid_setting_value).get("ok", true)), "arbitrary settings value accepted")
 
     if _failed:
         quit(1)
