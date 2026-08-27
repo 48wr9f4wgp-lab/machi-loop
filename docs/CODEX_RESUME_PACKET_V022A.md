@@ -2,15 +2,15 @@
 
 Status: Resume-safe handoff while Codex capacity is unavailable
 Created: 2026-08-26
-Updated: 2026-08-26 after outage-safe v0.22B work
+Updated: 2026-08-27 after outage-safe preparation completed
 Remote canonical repository: `48wr9f4wgp-lab/machi-loop`
-Remote baseline observed when this packet was created: `main` at `1065b4f9337cfff47b088c9884c1bef8f3001f54`
+Remote baseline intentionally preserved: `main` at `1065b4f9337cfff47b088c9884c1bef8f3001f54`
 
-> Important: the exact Codex local base SHA is intentionally not guessed. On resume, read `git status`, `git branch --show-current`, `git log -1 --oneline`, and `git diff` before any sync operation.
+> Important: do not guess the Codex local base SHA. On resume, inspect local state before any sync operation.
 
-## 1. Reserved scope — do not overwrite
+## 1. Reserved v0.22A scope — do not overwrite
 
-Codex has a locally implemented, tested, but uncommitted/unpushed v0.22A Feedback Pass. Until recovery is complete, the following paths are reserved and should not receive competing remote implementation changes:
+Codex has a locally implemented, locally tested, but uncommitted/unpushed v0.22A Feedback Pass.
 
 ### New local files reported by Codex
 - `feedback/feedback_settings.gd`
@@ -32,123 +32,242 @@ Codex has a locally implemented, tested, but uncommitted/unpushed v0.22A Feedbac
 - `tests/functional_build_regression_test.gd`
 - `.github/workflows/deploy-pages.yml`
 
+Do not create competing remote edits to these paths before recovery.
+
 ## 2. Reported v0.22A behavior
 
-- Distinct runtime-generated PCM16 SFX for arterial commit, goal complete, city tier up, widen, bulldoze, and insufficient cash.
-- Event cooldown, same-batch de-duplication, and deterministic reward ordering.
-- Haptics adapter with light/medium/strong semantic mapping.
-- Web/Windows/unknown platforms safely no-op for physical vibration.
-- SFX and haptics settings UI.
-- Save schema advanced to 6 with `feedback_settings` persistence, migration, checksum, backup, corruption recovery, and defaults for old saves.
-- Existing simulation balance/domain logic reported unchanged.
+- Distinct runtime PCM16 SFX for arterial commit, goal complete, city tier up, widen, bulldoze, insufficient cash.
+- Event cooldown and same-batch de-duplication.
+- Deterministic road → goal → tier reward feedback order.
+- Haptics abstraction with light/medium/strong semantics.
+- Web/Windows/unknown platform vibration path safely no-ops.
+- SFX/Haptics settings UI.
+- Save schema 6 with `feedback_settings` persistence and old-save defaults.
+- Existing save checksum/backup/corruption recovery/migration retained.
+- Existing simulation/domain balance reported unchanged.
 
-## 3. Reported verification state
+## 3. Reported local verification
 
-Reported local verification on Godot 4.7.2:
-- Validate: pass
-- Runtime smoke: pass
-- Existing fixtures: 12/12 pass
-- New Feedback fixtures: 3/3 pass
+Godot 4.7.2:
+- validate: pass
+- runtime smoke: pass
+- existing fixtures: 12/12 pass
+- new Feedback fixtures: 3/3 pass
 - Functional Build regression: pass
-- Expected first-road balance equation: `700 - 6*12 + 80 = 708`
-- Render fixture: pass, reported geometry=69
-- Save migration/recovery: pass
+- correct first-road balance: `700 - 6*12 + 80 = 708`
+- render fixture: pass, reported geometry=69
+- save migration/recovery: pass
 - Web export: pass
-- Local browser run: pass
-- Browser console: 0 warnings / 0 errors
+- local browser run: pass
+- browser console: 0 warnings / 0 errors
 
-Expected/non-blocking observations reported:
-- Intentional corrupted-save fixtures emit JSON parse failure before successful recovery.
-- Some pre-existing FTUE fixture shutdown RID/Object/Resource warnings remain.
-- Short editor validate may emit shutdown-related scan/StringName warnings.
-- Old local browser Service Worker state may request obsolete `/sw.js?v=20`; current export does not register that worker.
+Expected/non-blocking observations:
+- intentionally corrupted-save fixtures emit JSON parse failure before successful recovery
+- some pre-existing FTUE shutdown RID/Object/Resource warnings
+- short editor validate may emit shutdown scan/StringName warnings
+- stale local browser Service Worker state may request obsolete `/sw.js?v=20`
 
-## 4. Unverified items
+## 4. Items still unverified for v0.22A
 
-- GitHub Actions on the actual v0.22A diff
+- actual GitHub Actions on the v0.22A diff
 - GitHub Pages deployment
-- iPhone native haptics feel
-- Android native haptics and `VIBRATE` permission
-- Native iOS/Android packaging
-- Speaker/headphone subjective SFX tuning
-- Real-device performance instrumentation
-- Analytics provider integration
+- iPhone physical haptic feel
+- Android physical haptic behavior and permission configuration
+- native iOS/Android package generation
+- speaker/headphone subjective SFX quality
 
 ## 5. Resume Merge Gate
 
-On Codex recovery, do not `reset --hard`, `clean`, or blindly `pull`.
+Do not `reset --hard`, `clean`, or blindly `pull`.
 
 Required order:
 1. `git status`
 2. `git branch --show-current`
 3. `git log -1 --oneline`
-4. `git diff --stat` and full `git diff`
-5. Preserve local work using a WIP commit/patch/stash if necessary.
-6. `git fetch`
-7. Compare local base and remote `main`; explicitly inspect any remote commits made during the outage.
-8. Reconcile without reimplementing or overwriting the v0.22A local work.
-9. Re-run validate → runtime → all fixtures → save/migration → functional regression → render → Web export.
-10. Only then commit/push v0.22A to a feature branch and open a PR.
-11. Require GitHub Actions green before merge.
-12. Require Pages deployment and iPhone PWA smoke before closing v0.22A.
+4. `git diff --stat`
+5. full `git diff`
+6. preserve local v0.22A using a WIP commit/patch/stash if needed
+7. only then `git fetch`
+8. compare local base with remote `main`
+9. confirm remote main is still the intentional shared baseline or explicitly review any newer remote change
+10. reconcile without reimplementing/overwriting local v0.22A
+11. re-run validate → runtime → all fixtures → save/migration/recovery → Functional regression → render → Web export
+12. commit/push v0.22A to a feature branch
+13. open PR
+14. require GitHub Actions green
+15. merge only after green
+16. require Pages deployment green
+17. perform iPhone PWA smoke before closing v0.22A
 
-## 6. Changes intentionally allowed during Codex outage
+## 6. Outage-safe Draft PR inventory
 
-Remote work during the outage is limited to non-conflicting planning/documentation and isolated new modules on separate branches, especially:
-- v0.22B analytics event dictionary/foundation
-- performance measurement/budget/foundation
-- native packaging checklist
-- production Audio/Haptics quality target
-- future Codex Task Packets
+All remain draft/unmerged. `main` has intentionally not been advanced.
 
-No remote code should touch the reserved v0.22A paths until the Merge Gate is complete.
+### PR #29 — `docs/v022b-planning`
+Planning/resume package:
+- this Resume Packet
+- Analytics Event Dictionary
+- Performance Budget
+- Native requirements
+- Production Audio/Haptics target
+- Integration-to-RC Master Plan
 
-### Outage branches / PRs created
+### PR #30 — `feat/analytics-foundation-v022b`
+- versioned analytics schema
+- strict property/type/enum validation
+- PII key rejection
+- no-network/no-disk adapter
+- analytics controller
+- performance-summary rate guard
+- dedicated Analytics CI green
+- existing full MACHI LOOP CI green
 
-All of the following remain **draft/unmerged** so `main` stays at the original shared baseline while Codex local v0.22A is recovered:
+### PR #31 — `feat/performance-foundation-v022b`
+- P0-P5 named states
+- bounded 1200-frame monitor
+- avg/p95/worst/slow-frame metrics
+- sustained sub-30fps detector
+- >=100 ms interaction-stall detector
+- analytics-ready bands
+- dedicated Performance CI green
+- existing full MACHI LOOP CI green
 
-1. PR #29 — `docs/v022b-planning`
-   - Resume Packet
-   - Analytics Event Dictionary
-   - Performance Budget
-   - Native Export Requirements (verified 2026-08-26)
-   - Production Audio/Haptics Plan
-   - latest observed head: `f64782d1ec920c0a5c4ecd9d8ac33e10ecf5e8ca`
+### PR #32 — `chore/release-readiness-gates-v1`
+- release-readiness static audit
+- signing/secret/local-path hygiene
+- safer `.gitignore` for native signing artifacts
+- QA Matrix
+- Accessibility Gate
+- Localization Gate
+- Data/Privacy Inventory
+- Store Compliance snapshot
+- Final Audit Scorecard
+- RC Execution Plan
+- Store listing draft
+- Privacy Policy draft
+- third-party license inventory
+- external approval gates
+- Native preflight tool
+- Codex Native task packet
+- Codex RC fix-only task packet
+- current mobile-city-builder benchmark
+- Analytics/Observability provider ADRs
+- latest branch head static release audit: green
+- latest branch head existing full MACHI LOOP CI: green
 
-2. PR #30 — `feat/analytics-foundation-v022b`
-   - versioned analytics event schema
-   - strict property/type/enum validation
-   - explicit forbidden PII keys
-   - default no-network/no-disk adapter
-   - analytics controller with common context and one-per-session performance-summary guard
-   - dedicated Analytics CI: green
-   - existing full MACHI LOOP CI: green
-   - latest observed head: `073e0599891d82106f705aebf6939909521be084`
+### PR #33 — `feat/observability-foundation-v1`
+- strict severity/error-code/context validation
+- explicit PII/secret rejection
+- bounded 32-entry breadcrumb ring
+- no-network/no-disk crash reporter adapter
+- dedicated Observability CI green
+- existing full MACHI LOOP CI green
 
-3. PR #31 — `feat/performance-foundation-v022b`
-   - P0–P5 named performance states
-   - bounded 1200-frame rolling monitor
-   - avg/p95/worst frame metrics
-   - slow-frame rate
-   - sustained sub-30fps hard-regression detector
-   - >=100 ms critical input-stall detector
-   - analytics-ready performance bands
-   - dedicated Performance CI: green
-   - existing full MACHI LOOP CI: green
-   - latest observed head: `0f53e63e9fbc5cb00d46ebbd69b59e84b748855d`
+## 7. Post-v0.22A integration order
 
-These branches should be reviewed/rebased only **after** v0.22A is safely committed/pushed and its Merge Gate is complete. Do not reimplement their contents in the Codex local v0.22A branch.
+Do not merge stale outage branches blindly. Rebase/review one at a time after v0.22A is safely on main.
 
-## 7. Queued next work
+Recommended order:
+1. PR #32 — repository/release tooling first
+2. PR #30 — Analytics foundation
+3. PR #31 — Performance foundation
+4. PR #33 — Observability foundation
+5. PR #29 — planning docs last, so references match final merged state
 
-After v0.22A is safely merged and deployed:
-1. Rebase/review PR #29, #30, and #31 against the new main; merge only if still valid.
-2. Connect the AnalyticsController to meaningful game events; keep provider no-op until separately approved.
-3. Connect PerformanceMonitor to runtime frame/startup/interaction measurement and deterministic P1/P3/P5 states.
-4. Capture real-device performance baselines before optimization.
-5. Add Android native export configuration targeting the then-current Play requirement (API 36 baseline as of 2026-08-26).
-6. Validate Android permission + real-device haptics.
-7. Prepare iOS export, then build/test on macOS/Xcode and physical iPhone.
-8. Tune/replace placeholder SFX based on real speaker/headphone listening.
+A different order is allowed only if a concrete conflict/dependency makes it safer.
 
-Do not start RC-wide performance optimization or large refactors until actual device telemetry identifies a bottleneck.
+## 8. Remaining implementation after foundation merge
+
+Only thin runtime connection is intended. No new product features.
+
+### Analytics
+Connect meaningful events only:
+- session
+- FTUE
+- arterial/widen/bulldoze
+- meaningful blocked action
+- goal/tier/district progression
+- policy/service changes
+- feedback setting changes
+- save/migration/recovery outcome
+- bounded performance summary
+
+Provider remains no-op until separately approved.
+
+### Performance
+Connect:
+- startup-to-interactive
+- frame sampling
+- road interaction latency
+- geometry/tier context
+- P1/P3/P5 measurement states
+
+Do not optimize before measurement.
+
+### Observability
+Connect bounded semantic breadcrumbs around:
+- session ready
+- save/load/migration/recovery
+- road actions
+- progression transitions
+- strategy changes
+- internal recoverable/fatal errors
+
+Never log full save payload, free-form user data, file-system user paths, raw identifiers, tokens, or secrets.
+
+## 9. Native and physical-device work
+
+Android:
+- run Native preflight
+- verify JDK/Android SDK tooling
+- add Android export configuration using then-current Play requirements
+- add required haptic permission only if needed by final path
+- development signing only until distribution approval
+- build/install/test on physical Android
+
+Android device gate:
+- boot/resume
+- save/reload
+- haptics
+- SFX
+- P1/P3/P5 performance
+- background/foreground lifecycle
+
+Native iOS:
+- requires appropriate macOS/Xcode environment
+- export Godot iOS project
+- development signing only until distribution approval
+- physical iPhone test
+
+Native iPhone gate:
+- boot/resume
+- save/reload
+- real haptic semantics
+- speaker/headphone SFX
+- P1/P3/P5 performance
+- lifecycle interruption recovery
+
+## 10. Final phase
+
+After real-device baselines:
+1. Final Audit
+2. feature freeze
+3. fix-only stabilization
+4. full regression
+5. repeat device case that found each issue
+6. no P0/P1 findings
+7. all hard gates pass
+8. RC handoff
+
+Use `docs/INTEGRATION_TO_RC_MASTER_PLAN_V1.md` as the complete execution sequence and `docs/CODEX_RC_TASK_PACKET_V1.md` for the fix-only phase after PR #32 is merged.
+
+## 11. Explicitly forbidden without user approval
+
+- public release
+- Store submission/publication
+- production pricing activation
+- paid provider/service contract
+- distribution signing credential changes/publication
+- destructive production/user data operation
+
+No outage-safe branch should be reimplemented inside the local v0.22A branch.
