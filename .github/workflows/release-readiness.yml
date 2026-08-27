@@ -1,0 +1,47 @@
+name: Release readiness static checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  static-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python version
+        run: python3 --version
+
+      - name: Syntax-check release tools
+        run: python3 -m py_compile tools/release_readiness_audit.py tools/native_preflight.py
+
+      - name: Release readiness audit
+        run: python3 tools/release_readiness_audit.py
+
+      - name: Verify VERSION format
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          value = Path('VERSION').read_text(encoding='utf-8').strip()
+          if not re.fullmatch(r'\d+\.\d+(?:[A-Za-z0-9._-]+)?', value):
+              raise SystemExit(f'Invalid VERSION format: {value!r}')
+          print(f'VERSION_OK {value}')
+          PY
+
+      - name: Verify canonical game docs exist
+        run: |
+          test -f GDD.md
+          test -f docs/PRODUCT_LOCK_V1.md
+          test -f docs/SUCCESS_DEFINITION_V1.md
+          test -f docs/ART_BIBLE_3D_PRODUCTION_V021.md
+          test -f docs/FINAL_AUDIT_SCORECARD_V1.md
+          test -f docs/QA_MATRIX_V1.md
+          echo DOCUMENT_BASELINE_OK
