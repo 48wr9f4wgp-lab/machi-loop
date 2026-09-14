@@ -22,3 +22,8 @@ jobs:
         run: |
           set -euxo pipefail
           godot --headless --path . --script res://tests/feedback_controller_test.gd
+      - name: Feedback save migration fixture
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/feedback_save_migration_test.gd
