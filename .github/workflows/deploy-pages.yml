@@ -50,7 +50,7 @@ jobs:
         run: |
           set -euxo pipefail
           apt-get update
-          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends fonts-noto-cjk python3-fonttools fontconfig librsvg2-bin
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends fonts-noto-cjk python3-fonttools fontconfig librsvg2-bin file
           mkdir -p generated
           FONT_SRC="$(fc-match 'Noto Sans CJK JP' -f '%{file}\n' | head -n 1)"
           test -n "$FONT_SRC"
@@ -69,6 +69,7 @@ jobs:
             --no-hinting
           test -s generated/MachiLoopJP.otf
           rsvg-convert --version
+          file --version
           ls -lh generated/MachiLoopJP.otf
 
       - name: Validate Godot project
