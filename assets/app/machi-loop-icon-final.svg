@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34bfff"/>
+      <stop offset="0.52" stop-color="#8de8ff"/>
+      <stop offset="1" stop-color="#18b7b7"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#cce9ee"/>
+    </linearGradient>
+    <linearGradient id="roadEdge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8ffff"/>
+      <stop offset="1" stop-color="#80dadd"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#062d38" flood-opacity=".35"/>
+    </filter>
+    <clipPath id="clip"><rect x="34" y="34" width="956" height="956" rx="205"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#clip)">
+    <rect width="1024" height="1024" fill="url(#sky)"/>
+    <circle cx="126" cy="112" r="95" fill="#fff8c8" opacity=".62"/>
+    <path d="M0 442 L90 352 150 405 235 300 330 408 430 326 530 414 650 304 742 395 832 315 930 398 1024 340 1024 560 0 560Z" fill="#3aa7a1" opacity=".55"/>
+    <path d="M0 474 L92 405 170 458 248 380 336 459 436 392 530 468 624 394 716 458 810 382 900 454 1024 410 1024 585 0 585Z" fill="#4dbf7b" opacity=".55"/>
+
+    <!-- skyline -->
+    <g opacity=".98" filter="url(#shadow)">
+      <rect x="118" y="326" width="92" height="220" rx="10" fill="#ecf8f7"/>
+      <rect x="142" y="286" width="54" height="260" rx="8" fill="#f9ffff"/>
+      <rect x="236" y="250" width="112" height="296" rx="10" fill="#e3f5f4"/>
+      <rect x="370" y="308" width="100" height="238" rx="10" fill="#fbffff"/>
+      <rect x="476" y="205" width="92" height="341" rx="10" fill="#e8f7f7"/>
+      <rect x="584" y="274" width="120" height="272" rx="10" fill="#f8ffff"/>
+      <rect x="724" y="232" width="88" height="314" rx="10" fill="#e4f4f4"/>
+      <rect x="826" y="326" width="86" height="220" rx="10" fill="#f7ffff"/>
+      <path d="M522 205V154" stroke="#fff" stroke-width="10"/>
+    </g>
+
+    <g fill="#2f8ca9" opacity=".8">
+      <g id="win">
+        <rect x="132" y="360" width="20" height="29" rx="3"/><rect x="171" y="360" width="20" height="29" rx="3"/>
+        <rect x="132" y="410" width="20" height="29" rx="3"/><rect x="171" y="410" width="20" height="29" rx="3"/>
+      </g>
+      <use href="#win" transform="translate(120 -62) scale(1.1 1.15)"/>
+      <use href="#win" transform="translate(248 -8)"/>
+      <use href="#win" transform="translate(366 -78)"/>
+      <use href="#win" transform="translate(484 -24) scale(1.05 1.1)"/>
+      <use href="#win" transform="translate(606 -72)"/>
+      <use href="#win" transform="translate(704 -8)"/>
+    </g>
+
+    <!-- ground and trees -->
+    <ellipse cx="510" cy="782" rx="420" ry="206" fill="#18a976"/>
+    <ellipse cx="510" cy="790" rx="330" ry="150" fill="#65d94b"/>
+    <g fill="#168d55">
+      <circle cx="173" cy="654" r="36"/><circle cx="222" cy="714" r="44"/><circle cx="812" cy="672" r="38"/><circle cx="863" cy="728" r="46"/>
+      <circle cx="346" cy="768" r="34"/><circle cx="685" cy="778" r="34"/><circle cx="510" cy="824" r="40"/>
+    </g>
+
+    <!-- elevated loop -->
+    <ellipse cx="512" cy="700" rx="426" ry="230" fill="none" stroke="#d7fbff" stroke-width="108" filter="url(#shadow)"/>
+    <ellipse cx="512" cy="700" rx="426" ry="230" fill="none" stroke="#202b32" stroke-width="78"/>
+    <ellipse cx="512" cy="700" rx="426" ry="230" fill="none" stroke="#ffffff" stroke-width="10" stroke-dasharray="48 34"/>
+    <ellipse cx="512" cy="700" rx="426" ry="230" fill="none" stroke="#4ed5d5" stroke-width="12" opacity=".75" transform="translate(0 50)"/>
+
+    <!-- bridge pillars -->
+    <g fill="#d7edf0">
+      <rect x="180" y="781" width="54" height="132" rx="8"/><rect x="334" y="842" width="54" height="118" rx="8"/>
+      <rect x="636" y="842" width="54" height="118" rx="8"/><rect x="790" y="781" width="54" height="132" rx="8"/>
+    </g>
+
+    <!-- Giant M structure -->
+    <path d="M232 606 L232 286 Q232 224 292 224 L375 224 L512 435 L649 224 L732 224 Q792 224 792 286 L792 606 L684 606 L684 374 L557 558 Q539 584 512 584 Q485 584 467 558 L340 374 L340 606 Z"
+          fill="url(#edge)" stroke="#ffffff" stroke-width="18" stroke-linejoin="round" filter="url(#shadow)"/>
+    <!-- road on M -->
+    <path d="M294 250 L512 520 L730 250" fill="none" stroke="#202b32" stroke-width="82" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M294 250 L512 520 L730 250" fill="none" stroke="#ffffff" stroke-width="12" stroke-dasharray="52 34" stroke-linecap="round"/>
+    <path d="M445 436 L512 520 L579 436" fill="none" stroke="#ffffff" stroke-width="11" stroke-linecap="round"/>
+
+    <!-- highlight -->
+    <path d="M146 132 C215 72 320 58 402 84" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round" opacity=".55"/>
+  </g>
+
+  <rect x="34" y="34" width="956" height="956" rx="205" fill="none" stroke="#d8fbff" stroke-width="12" opacity=".9"/>
+</svg>

@@ -50,7 +50,7 @@ jobs:
         run: |
           set -euxo pipefail
           apt-get update
-          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends fonts-noto-cjk python3-fonttools fontconfig
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends fonts-noto-cjk python3-fonttools fontconfig librsvg2-bin file
           mkdir -p generated
           FONT_SRC="$(fc-match 'Noto Sans CJK JP' -f '%{file}\n' | head -n 1)"
           test -n "$FONT_SRC"
@@ -68,6 +68,8 @@ jobs:
             --recommended-glyphs \
             --no-hinting
           test -s generated/MachiLoopJP.otf
+          rsvg-convert --version
+          file --version
           ls -lh generated/MachiLoopJP.otf
 
       - name: Validate Godot project
@@ -172,8 +174,9 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          cp assets/web/machi-loop-icon-192.png build/web/machi-loop-icon-192.png
-          cp assets/web/machi-loop-icon-512.png build/web/machi-loop-icon-512.png
+          test -s assets/app/machi-loop-icon-final.svg
+          rsvg-convert -w 192 -h 192 assets/app/machi-loop-icon-final.svg > build/web/machi-loop-icon-final-192.png
+          rsvg-convert -w 512 -h 512 assets/app/machi-loop-icon-final.svg > build/web/machi-loop-icon-final-512.png
 
           cat > /tmp/machi_head.html <<'EOF'
           <meta name="apple-mobile-web-app-capable" content="yes">
@@ -181,7 +184,7 @@ jobs:
           <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
           <meta name="apple-mobile-web-app-title" content="MACHI LOOP">
           <meta name="theme-color" content="#17251F">
-          <link rel="apple-touch-icon" sizes="192x192" href="machi-loop-icon-192.png">
+          <link rel="apple-touch-icon" sizes="192x192" href="machi-loop-icon-final-192.png">
           <link rel="manifest" href="manifest.webmanifest">
           <script>
           (async function () {
@@ -217,7 +220,7 @@ jobs:
           fi
 
           cat > build/web/manifest.webmanifest <<'EOF'
-          {"name":"MACHI LOOP","short_name":"MACHI LOOP","start_url":"./","scope":"./","display":"standalone","orientation":"portrait","background_color":"#17251F","theme_color":"#17251F","icons":[{"src":"machi-loop-icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"machi-loop-icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"}]}
+          {"name":"MACHI LOOP","short_name":"MACHI LOOP","start_url":"./","scope":"./","display":"standalone","orientation":"portrait","background_color":"#17251F","theme_color":"#17251F","icons":[{"src":"machi-loop-icon-final-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"machi-loop-icon-final-512.png","sizes":"512x512","type":"image/png","purpose":"any"}]}
           EOF
 
       - name: Verify Web build
@@ -228,12 +231,14 @@ jobs:
           test -n "$(find build/web -maxdepth 1 -name '*.wasm' -print -quit)"
           test -f build/web/build.txt
           test -f build/web/manifest.webmanifest
-          test -s build/web/machi-loop-icon-192.png
-          test -s build/web/machi-loop-icon-512.png
+          test -s build/web/machi-loop-icon-final-192.png
+          test -s build/web/machi-loop-icon-final-512.png
+          file build/web/machi-loop-icon-final-192.png | grep -q 'PNG image data, 192 x 192'
+          file build/web/machi-loop-icon-final-512.png | grep -q 'PNG image data, 512 x 512'
           grep -q 'apple-mobile-web-app-capable' build/web/index.html
-          grep -q 'apple-touch-icon' build/web/index.html
-          grep -q 'machi-loop-icon-192.png' build/web/manifest.webmanifest
-          grep -q 'machi-loop-icon-512.png' build/web/manifest.webmanifest
+          grep -q 'machi-loop-icon-final-192.png' build/web/index.html
+          grep -q 'machi-loop-icon-final-192.png' build/web/manifest.webmanifest
+          grep -q 'machi-loop-icon-final-512.png' build/web/manifest.webmanifest
           grep -q 'viewport-fit=cover' build/web/index.html
 
       - name: Configure Pages
