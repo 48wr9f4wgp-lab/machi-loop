@@ -1,4 +1,4 @@
-extends "res://main_v21_assets.gd"
+extends "res://main_v21_visual_pass2.gd"
 
 # MACHI LOOP v0.22A — feedback pass rebuilt from the GitHub baseline.
 # Event-specific SFX, native-safe haptics and persisted player toggles.
