@@ -1,0 +1,29 @@
+name: Feedback v0.22A
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  feedback:
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.7.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prime Godot project metadata
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --editor --quit-after 1
+      - name: Feedback controller fixture
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/feedback_controller_test.gd
+      - name: Feedback save migration fixture
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --script res://tests/feedback_save_migration_test.gd
