@@ -114,6 +114,11 @@ func _bulldoze(p: Vector2i) -> void:
     if not _in_bounds(p):
         return
     var original: int = int(grid[p.y][p.x])
+    if original in [Cell.RESIDENTIAL, Cell.COMMERCIAL, Cell.INDUSTRIAL]:
+        # Ordinary development is simulation-owned by the canonical GDD. The
+        # player's demolition verb is road management, not manual zoning cleanup.
+        _toast("SELECT A MAIN ROAD")
+        return
     var was_widened: bool = widened.has(_key(p))
     super._bulldoze(p)
     if original not in [Cell.ARTERIAL, Cell.LOCAL] or int(grid[p.y][p.x]) != Cell.EMPTY:

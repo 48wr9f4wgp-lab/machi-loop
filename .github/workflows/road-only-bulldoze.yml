@@ -1,0 +1,28 @@
+name: Road-only bulldoze checks
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "main_v17_economy.gd"
+      - "tests/road_only_bulldoze_test.gd"
+      - ".github/workflows/road-only-bulldoze.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  road-only-bulldoze:
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.7.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Godot version
+        run: godot --version
+
+      - name: Road-only bulldoze fixture
+        run: godot --headless --path . --script res://tests/road_only_bulldoze_test.gd
