@@ -12,6 +12,11 @@ jobs:
       image: barichello/godot-ci:4.7.1
     steps:
       - uses: actions/checkout@v4
+      - name: Prime Godot project metadata
+        shell: bash
+        run: |
+          set -euxo pipefail
+          godot --headless --path . --editor --quit-after 1
       - name: Feedback controller fixture
         shell: bash
         run: |
