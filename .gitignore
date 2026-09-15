@@ -1,3 +1,27 @@
 .godot/
 build/
 .DS_Store
+
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+
+# Android / Java signing and generated state
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+.gradle/
+
+# Apple signing / provisioning
+*.mobileprovision
+*.cer
+*.provisionprofile
+
+# IDE / local machine state
+.idea/
+.vscode/
+*.user
