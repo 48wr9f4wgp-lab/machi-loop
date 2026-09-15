@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "phase": "主要機能実装",
+  "checks": {
+    "boot": "ok",
+    "test": "warn",
+    "device": "ok",
+    "save": "none",
+    "analytics": "none",
+    "performance": "none",
+    "release": "warn"
+  },
+  "next": "現行の主要機能と初回導線を実機で再確認する",
+  "note": "Web実機起動は過去に確認済み。公開前最終版としては扱わない。",
+  "updated_at": "2026-09-15"
+}
