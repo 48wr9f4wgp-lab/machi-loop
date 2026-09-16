@@ -8,7 +8,6 @@ var v23_birth_started: bool = false
 var v23_birth_announced: bool = false
 var v23_birth_road_count: int = 0
 var v23_birth_population: int = 0
-var v23_birth_elapsed: float = 0.0
 var v23_alert_text: String = ""
 
 func _ready() -> void:
@@ -19,21 +18,15 @@ func _ready() -> void:
     v23_birth_announced = population > 0
     queue_redraw()
 
-func _process(delta: float) -> void:
-    super._process(delta)
-    if v23_birth_started and not v23_birth_announced:
-        v23_birth_elapsed += delta
-    queue_redraw()
-
 func _commit_arterial() -> void:
     var before: int = _count_cells(Cell.ARTERIAL)
     super._commit_arterial()
     var after: int = _count_cells(Cell.ARTERIAL)
     if after > before and not v23_birth_started:
         v23_birth_started = true
-        v23_birth_elapsed = 0.0
         v23_birth_road_count = after
         v23_alert_text = "街が動きはじめました"
+        queue_redraw()
 
 func _simulation_tick() -> void:
     var before_population: int = population
@@ -45,12 +38,9 @@ func _simulation_tick() -> void:
         if v22_feedback != null:
             v22_feedback.goal_complete()
     _v23_refresh_world_alert()
+    queue_redraw()
 
-# Replace dashboard-first overlays with the city-as-UI layer.
 func _draw() -> void:
-    # Draw the existing world and interaction layer, then deliberately cover the
-    # legacy information bands. This first step is presentation-only and keeps
-    # simulation/save behavior intact while the v2 slice is rebuilt below it.
     super._draw()
     _v23_draw_city_first_shell()
 
@@ -61,16 +51,13 @@ func _v22_draw_feedback_settings() -> void:
 func _v23_draw_city_first_shell() -> void:
     var size: Vector2 = get_viewport_rect().size
     var font: Font = v11_font if v11_font != null else ThemeDB.fallback_font
-
-    # Quiet top band: only identity, population and money survive as persistent data.
     var top: Rect2 = Rect2(0.0, 0.0, size.x, 112.0)
     draw_rect(top, Color("#F4F2E8"))
     draw_string(font, Vector2(18.0, 28.0), "MACHI LOOP", HORIZONTAL_ALIGNMENT_LEFT, 170.0, 18, Color("#16352A"))
     draw_string(font, Vector2(18.0, 51.0), _v23_stage_name(), HORIZONTAL_ALIGNMENT_LEFT, 170.0, 10, Color("#668074"))
-    draw_string(font, Vector2(size.x - 194.0, 31.0), "人口  %,d" % population, HORIZONTAL_ALIGNMENT_RIGHT, 86.0, 11, Color("#244A3B"))
-    draw_string(font, Vector2(size.x - 102.0, 31.0), "¥%,d" % cash, HORIZONTAL_ALIGNMENT_RIGHT, 88.0, 11, Color("#244A3B"))
+    draw_string(font, Vector2(size.x - 194.0, 31.0), "人口  %d" % population, HORIZONTAL_ALIGNMENT_RIGHT, 86.0, 11, Color("#244A3B"))
+    draw_string(font, Vector2(size.x - 102.0, 31.0), "¥%d" % cash, HORIZONTAL_ALIGNMENT_RIGHT, 88.0, 11, Color("#244A3B"))
 
-    # One contextual sentence replaces permanent demand/traffic/policy cards.
     var message: String = _v23_context_message()
     if not message.is_empty():
         var pill_w: float = minf(size.x - 32.0, 350.0)
@@ -78,7 +65,6 @@ func _v23_draw_city_first_shell() -> void:
         draw_rect(pill, Color(0.07, 0.19, 0.14, 0.92))
         draw_string(font, pill.position + Vector2(12.0, 22.0), message, HORIZONTAL_ALIGNMENT_CENTER, pill.size.x - 24.0, 10, Color("#F5FFF9"))
 
-    # Cover the old bottom dashboard while preserving the interaction strip at the edge.
     var bottom_h: float = 108.0
     var bottom: Rect2 = Rect2(0.0, size.y - bottom_h, size.x, bottom_h)
     draw_rect(bottom, Color("#F4F2E8"))
@@ -120,7 +106,7 @@ func _v23_refresh_world_alert() -> void:
     var worst_ratio: float = 0.0
     for y: int in range(GRID_H):
         for x: int in range(unlocked_cols):
-            var p := Vector2i(x, y)
+            var p: Vector2i = Vector2i(x, y)
             if int(grid[y][x]) != Cell.ARTERIAL:
                 continue
             worst_ratio = maxf(worst_ratio, _road_load(p) / maxf(0.1, _road_capacity(p)))
