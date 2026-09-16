@@ -1,185 +1,274 @@
-# MACHI LOOP — GDD v1.0
+# MACHI LOOP — GDD v2.0
 
-Status: Canonical game-specific GDD for Functional Build
-Date: 2026-08-24
-Supersedes: GDD v0.1
+Status: Proposed canonical game-specific GDD after concept relock
+Date: 2026-09-16
+Supersedes on merge: GDD v1.0
 
-## 1. Game concept
-MACHI LOOP is a portrait 3D city-management game built around one deliberate simplification: the player lays strategic main roads, while the city automatically creates local roads and ordinary development around them.
+## 1. Product thesis
+MACHI LOOP is a portrait 3D city-growth simulation about causing a living city to emerge from a small number of high-leverage planning decisions.
 
-The game should feel faster and less laborious than a desktop hardcore city simulator, while still producing meaningful planning decisions.
+**Player-facing promise:**
+> 一本の道から、街が生まれる。
 
-## 2. Player verbs
-### Primary
-- Draw a main road.
-- Widen an existing main road.
-- Remove a road section.
+The player does not manually place routine buildings or local streets. The player creates the conditions for growth; the city responds autonomously, develops its own structure, creates new pressures, and records a unique urban history.
 
-### Management
-- Select a city policy.
-- Activate/manage high-level city services.
-- Read demand, traffic, happiness and finance.
-- Decide which district/problem to solve next.
+The primary emotional target is not spreadsheet optimization. It is the visual satisfaction of watching an empty landscape rapidly become a city because of the player's intervention.
 
-## 3. Simulation model
-### Core state
-- Population
-- Jobs
-- Cash
-- Income / operating balance
-- Happiness
-- Traffic / congestion
-- Residential demand
-- Commercial demand
-- Industrial demand
-- Service coverage/pressure
-- District unlock state
-- City tier
+## 2. Design pillars
+1. **Explosive visible growth** — the first road must trigger an immediate, legible chain reaction.
+2. **City as the UI** — normal play is read primarily from the 3D city, traffic, construction, density and district condition; detailed numbers are secondary diagnostics.
+3. **Indirect control** — the player guides development rather than placing ordinary buildings one by one.
+4. **Emergent urban problems** — problems come from the city's structure and history, not arbitrary punishment.
+5. **Escalating authority** — the player begins with roads and gains higher-level planning tools only as the city becomes complex enough to justify them.
+6. **A city has a story** — a completed city preserves its growth history and remains visitable.
 
-### Development rule
-Ordinary development is simulation-driven, not manually placed. Eligible land near connected roads may become residential, commercial or industrial based on demand, accessibility, policy, existing jobs/population balance and local pressure.
+## 3. Core Loop
+1. Observe the city and its visible pressure.
+2. Make one high-leverage intervention.
+3. Watch an immediate growth/reconfiguration response.
+4. Let population, jobs, accessibility, land value and movement reshape the city.
+5. A new structural opportunity or problem emerges.
+6. Read the cause from the city itself.
+7. Intervene again with roads, district direction, transit or a high-level policy.
+8. Repeat until the city reaches a completion state.
 
-### Local roads
-Local roads are generated automatically to support development. Their role is to make neighborhoods legible and connected without asking the player to perform low-value road micromanagement.
+**Core emotional loop:**
+Intervention → chain reaction → surprise/satisfaction → consequence → understanding → next intervention.
 
-## 4. Demand model
-Each zone family has a normalized demand score from 0–100.
+Waiting without a meaningful decision is not gameplay.
 
-### Residential demand rises when
-- jobs exceed available workers;
-- happiness is healthy;
-- traffic is manageable;
-- suitable connected land exists.
+## 4. Meta Loop
+1. Start from a mostly empty map.
+2. Create the first growth axis.
+3. Grow from settlement to metropolis.
+4. Reach City Completion.
+5. Review the city's timeline and defining turning points.
+6. Preserve the city in CITY ARCHIVE and allow continued sandbox play.
+7. Unlock/start a new terrain condition and create a different city.
 
-Residential demand falls when
-- unemployment is high;
-- happiness is low;
-- congestion/service pressure is excessive.
+## 5. Player verbs and authority progression
+### Stage 1 — Settlement: create growth
+- Draw strategic main roads.
+- Remove/re-route a main road when necessary.
 
-### Commercial demand rises when
-- population and household spending capacity grow;
-- commercial jobs/services are under-supplied;
-- accessibility is good.
+No policy wall, service dashboard or dense statistics at first contact.
 
-Commercial demand falls when
-- too much commercial capacity exists;
-- traffic/accessibility is poor;
-- local purchasing power is weak.
+### Stage 2 — Town: shape growth
+- Draw main roads.
+- Widen overloaded main roads.
+- Create redundancy/bypasses/connectors.
 
-### Industrial demand rises when
-- the city needs additional jobs;
-- population outpaces employment;
-- connected buildable land exists.
+### Stage 3 — Small city: direct districts
+Unlock a small set of district-level directions, such as:
+- residential encouragement;
+- commercial encouragement;
+- densification;
+- greening/quality emphasis.
 
-Industrial demand falls when
-- unemployment is already high;
-- industrial capacity is excessive;
-- traffic pressure makes freight/access poor.
+These are influences, not manual zoning of every parcel.
 
-Demand is a pressure signal, not a guarantee. Growth still requires road access and buildable land.
+### Stage 4 — City: create mobility axes
+Unlock high-level public transport. The preferred interaction is corridor/axis designation and strategic network decisions rather than repetitive stop-by-stop micromanagement.
 
-## 5. Traffic
-Traffic is a strategic pressure system, not a full desktop traffic simulator.
+Transit must visibly change accessibility and development patterns.
 
-### Inputs
-- population
-- jobs
-- trip generation by building type
-- road connectivity
-- arterial capacity
-- widening state
-- city policy
+### Stage 5 — Major city / metropolis: govern at high level
+Unlock a small number of consequential city policies. Policies must visibly alter city evolution and create trade-offs. Do not recreate a desktop city simulator's administration surface.
 
-### Player response
-- add a new main road;
-- create redundancy in the network;
-- widen overloaded arterials;
-- choose a traffic-oriented policy;
-- later use high-level services/upgrades.
+**Permanent rule:** routine buildings and local roads remain simulation-driven throughout the game.
 
-### Failure rule
-Traffic can materially reduce growth, happiness and income but must not create an unrecoverable dead city.
+## 6. Autonomous growth model
+The simulation should create understandable causal chains.
 
-## 6. Economy
-### Income
-- tax/revenue generated by active population and employment;
-- modified by city policy and city condition.
+### Foundational causal chain
+Main-road access
+→ buildable accessible land
+→ housing/employment development
+→ population/jobs
+→ spending and movement
+→ commercial/industrial response
+→ traffic and accessibility changes
+→ land-value/density changes
+→ redevelopment
+→ new urban structure.
 
-### Costs
-- road construction;
-- road widening;
-- demolition;
-- city services and upgrades;
-- later: district/major-project costs.
+### Internal simulation state
+The implementation may use detailed values including:
+- population;
+- jobs;
+- household/worker balance;
+- accessibility;
+- road capacity and congestion;
+- residential/commercial/industrial pressure;
+- land value;
+- density;
+- district attractiveness;
+- cash/economic sustainability;
+- policy/transit modifiers.
 
-### Recovery
-A player who makes a weak road decision must still retain at least one practical recovery path. The game must not allow ordinary play to end in a state where the player has no money and no meaningful action.
+These values are simulation inputs and diagnostics. They are not automatically entitled to permanent HUD space.
 
-## 7. City services
-v1.0 uses **high-level services**, not utility-network micromanagement.
+### Growth rule
+Development requires plausible access and pressure. New development should preferentially reinforce understandable urban patterns: road frontage, intersections, accessibility nodes, established centers and later transit corridors.
 
-Candidate service families:
-- Mobility: transit/traffic efficiency.
-- Safety: fire/police/emergency resilience.
-- Education: higher-value jobs and city tier progression.
-- Green: happiness/environment and residential attractiveness.
+The player should be able to look at a city and form a useful hypothesis about why an area is growing or declining.
 
-Services should operate at city-wide or district-wide level through a small number of strategic choices. Exact service inventory is a Functional Build task, but the interaction model is locked: no repetitive one-building-per-block placement loop.
+## 7. Emergent urban phenomena
+Player-facing problems are consequences of city structure. Candidate phenomena include:
+- chronic congestion caused by insufficient network redundancy;
+- housing shortage caused by poor access to viable residential land;
+- employment imbalance;
+- declining old center after traffic/access shifts elsewhere;
+- rapid densification around a strong accessibility node;
+- low-density sprawl caused by excessive outward road expansion;
+- overloaded growth corridor;
+- split city caused by weak cross-connections;
+- new subcenter formation after a bypass/transit intervention.
 
-## 8. Policies
-Current policy archetypes remain valid:
-- 住宅重視 — stronger residential growth/happiness, weaker revenue efficiency.
-- 雇用重視 — stronger job/commercial-industrial growth and income, with a happiness tradeoff.
-- 交通重視 — stronger road capacity, with an economic tradeoff.
+Do not surface these primarily as random debuffs. The phenomenon should be visible in the city before or alongside any explanatory UI.
 
-Policies must create visible differences in city evolution, not merely change labels.
+Negative states must remain recoverable. A weak decision should create an interesting repair problem, not an unrecoverable dead city.
+
+## 8. Challenge model
+MACHI LOOP has no ordinary fail screen. Difficulty comes from the fact that successful growth creates new complexity.
+
+The player should repeatedly experience:
+> "The city grew because of what I did; now that growth created a new problem I need to understand."
+
+A healthy challenge has:
+- a visible symptom;
+- a traceable structural cause;
+- at least one practical intervention;
+- a visible response after intervention.
+
+Cash can constrain choices but must never produce a state where the player has no meaningful recovery action.
 
 ## 9. Progression
-### Short-term
-City Goals provide a continuously visible next objective and reward.
+Progression represents a change in urban form and player responsibility, not only a number threshold.
 
-### Mid-term
-District unlocks open more buildable land and larger network problems.
+Provisional stages:
+1. 集落 — first road, first homes, first local growth.
+2. 町 — recognizable neighborhoods and first traffic pressure.
+3. 小都市 — multiple districts and district direction.
+4. 都市 — competing centers and public-transport decisions.
+5. 大都市 — high density, network restructuring and major trade-offs.
+6. メトロポリス — complex multi-center city and completion challenge.
 
-### Long-term
-City tiers escalate the simulation:
-1. 郊外
-2. 小都市
-3. 地方都市
-4. 中核都市
-5. 大都市
-6. メトロポリス
+Each transition requires:
+- a visible transformation in city form;
+- at least one new planning capability;
+- at least one new class of structural pressure.
 
-Each tier should introduce at least one new capability and one new pressure. Higher tiers cannot be only larger numbers.
+## 10. City Completion
+A city can reach a formal completion state when it demonstrates sustained metropolitan maturity rather than merely crossing one population number.
 
-## 10. FTUE
-Target flow:
-1. player sees one dominant instruction: draw a main road;
-2. drag gesture creates the road;
-3. local growth happens immediately;
-4. population/jobs feedback appears;
-5. first short goal/reward is completed;
-6. player is shown the next city pressure/action;
-7. policy or management depth appears only after the player understands road-driven growth.
+Final thresholds must be tuned in playtest, but completion should combine a small set of legible criteria such as:
+- sufficient scale/population;
+- functioning employment/housing balance;
+- acceptable city-wide accessibility;
+- recovery from or management of major structural pressures;
+- required metropolis progression milestones.
 
-No long tutorial text wall.
+Completion is a milestone, not forced retirement. The city remains playable afterward.
 
-## 11. Failure and recovery
-There is no traditional game-over in ordinary city play.
+## 11. City History and CITY ARCHIVE
+The game records meaningful snapshots/events from first road to completion.
 
-Negative states are recoverable management problems:
-- congestion;
-- unemployment;
-- housing shortage;
-- low happiness;
-- weak cash flow.
+Candidate history markers:
+- first main road;
+- first residential cluster;
+- first commercial center;
+- first major congestion crisis;
+- first bypass/transit axis;
+- formation of a second urban center;
+- major density transition;
+- population milestones;
+- City Completion.
 
-The game should make the cause and likely remedy legible. A player should be able to repair a bad city rather than restart by default.
+At completion, present a concise visual timeline/time-lapse showing how the city transformed.
 
-## 12. Save/resume
-The city is persistent. Save safety is part of the product, not an optional feature.
+CITY ARCHIVE stores completed cities with summary identity, terrain, completion time/era, population/scale and notable urban form. Completed cities can be revisited and continued in sandbox play.
 
-Required:
+The archive is the primary meta-progression collection, not an excuse for stat inflation.
+
+## 12. Terrain replayability
+New cities should change planning constraints through terrain rather than merely raising numerical difficulty.
+
+Candidate map families:
+- open plain;
+- coast;
+- river/bridge city;
+- mountain/valley;
+- island/limited land.
+
+Terrain must materially change viable road structure and resulting urban form.
+
+## 13. FTUE / first 60 seconds
+The first minute must prove the product promise.
+
+Target sequence:
+1. Mostly empty 3D landscape with one clear connection/entry point.
+2. One dominant instruction: **「最初の道を引こう」**.
+3. Player draws a main road.
+4. Road commit receives immediate sound/motion/haptic acknowledgement where supported.
+5. A first vehicle/settler signal appears.
+6. First homes emerge quickly.
+7. Local streets branch automatically.
+8. Additional development follows in a readable chain reaction.
+9. Camera framing reveals that a settlement has formed.
+10. Message: **「街が生まれました」**.
+11. The next opportunity is communicated through the city, not a dashboard dump.
+
+Target emotional outcome: "I drew one road and all of this happened."
+
+## 14. UI/UX doctrine
+The 3D city is the dominant visual surface.
+
+### Persistent HUD
+Keep only information required for moment-to-moment decisions, provisionally:
+- city stage/identity;
+- cash/resource constraint;
+- minimal alert/opportunity indicators;
+- current primary tool state.
+
+### Contextual UI
+Demand, traffic causes, district condition, finance detail, policy detail and diagnostics appear contextually or on demand.
+
+### Prohibited direction
+Do not return to a screen dominated by permanent cards for demand, traffic, policy, finance, goals and settings simultaneously.
+
+Audio/haptic toggles belong in settings, not the primary play surface.
+
+Critical information cannot rely on color, sound or haptics alone.
+
+## 15. Visual and game-feel direction
+- Stylized 3D miniature city with strong portrait-phone readability.
+- Empty-to-dense transformation must be dramatic.
+- Construction, redevelopment and traffic flow are reward surfaces, not background decoration.
+- Arterials, local streets, district centers and density hierarchy must be readable without opening diagnostics.
+- Growth should use staged motion/VFX/audio so that chain reactions feel authored while remaining simulation-driven.
+- Camera behavior should help reveal transformation without taking control away from the player.
+
+## 16. Economy and services
+Economy exists to create trade-offs, not bookkeeping work.
+
+The player should understand whether the city can afford a major intervention without constantly reading an accounting panel.
+
+Services are high-level influences. Avoid utility-network micromanagement and repetitive one-building-per-block placement. Existing Mobility/Safety/Education/Green concepts may survive only where they reinforce autonomous city evolution and create visible strategic differences; otherwise simplify or remove them.
+
+## 17. Policies
+Policies are late/mid-game high-leverage choices. Keep the inventory small.
+
+A policy is valid only if:
+- it creates a meaningful trade-off;
+- it visibly changes city evolution;
+- the player can understand its consequence from the city;
+- it does not require permanent dashboard attention.
+
+Existing policy implementations are subject to revalidation against these rules.
+
+## 18. Save and history requirements
+The city is persistent. Existing save-safety requirements remain mandatory:
 - schema_version;
 - checksum/integrity;
 - atomic write;
@@ -187,52 +276,60 @@ Required:
 - corruption recovery;
 - migration fixture tests.
 
-## 13. Visual direction
-- Stylized 3D miniature-city diorama.
-- Strong readable silhouettes at portrait-phone scale.
-- Buildings communicate residential/commercial/industrial role without relying only on color.
-- Traffic and city problems use layered visual feedback, not HUD numbers alone.
-- Production assets replace procedural placeholder forms before RC.
+The new city-history/archive system must be versioned and migration-safe. Do not break existing saves silently; if a gameplay migration cannot preserve semantics, define an explicit compatibility strategy before implementation.
 
-## 14. Audio/haptics
-The final core interaction requires:
-- road preview sound;
-- road commit/build sound;
-- construction/growth sound;
-- milestone/reward sound;
-- subtle ambient city bed;
-- haptic acknowledgement for road commit, goal completion and major unlock.
+## 19. Analytics success model
+Before public launch, instrumentation must answer whether the new promise works.
 
-## 15. Analytics baseline
-Required event families before public launch:
+Key event families:
 - app/session start/end;
-- FTUE step;
-- road draw/commit/cancel;
-- road widen/remove;
-- policy select/change;
-- goal complete;
-- district unlock;
-- city tier up;
-- demand/traffic critical-state entry;
+- FTUE step and completion;
+- first-road draw/commit/cancel;
+- time from first road to first building/local road/settlement;
+- road draw/widen/remove;
+- district-direction/transit/policy decisions after unlock;
+- urban-phenomenon entry and recovery;
+- city-stage transition;
+- City Completion;
+- archive/revisit/new-city start;
 - save/load/recovery result;
 - performance/crash metadata without unnecessary PII.
 
-## 16. v1.0 non-goals
-- multiplayer;
-- social alliance systems;
-- mandatory backend;
-- full pedestrian simulation;
+Exact KPI targets belong in Success Definition, not in the GDD.
+
+## 20. Non-goals
+- manual placement of routine residential/commercial/industrial buildings;
+- manual local-road micromanagement;
 - manual utility networks;
-- large daily LiveOps calendar;
-- forced ads/gacha;
-- manual placement of routine buildings.
+- desktop-scale traffic engineering controls;
+- large permanent management dashboards;
+- arbitrary random punishment as the main challenge source;
+- mandatory backend/account;
+- multiplayer/social alliance systems;
+- forced ads/gacha/energy;
+- large daily LiveOps calendar.
 
-## 17. Acceptance principle
-Any new feature must answer at least one of these questions:
-- Does it make road planning more meaningful?
-- Does it make city reaction more satisfying?
-- Does it create a clear strategic pressure or recovery decision?
-- Does it improve progression/return motivation?
-- Does it materially improve product quality, accessibility, performance or reliability?
+## 21. Feature acceptance rule
+A feature must materially improve at least one of:
+- the satisfaction/clarity of autonomous city growth;
+- the meaning of high-leverage planning decisions;
+- the legibility and recovery of emergent urban problems;
+- the transformation from settlement to metropolis;
+- City History / Archive / replay motivation;
+- product quality, accessibility, performance or reliability.
 
-If not, it is probably scope creep.
+If it mainly adds management surface area without strengthening those outcomes, reject it as scope creep.
+
+## 22. Current implementation status after concept relock
+The existing Functional Build is an implementation asset, not the new design authority.
+
+Reusable foundations include road drawing, auto-growth infrastructure, traffic/economy/service/progression systems, save safety, feedback, analytics/observability foundations and Web/iPhone test deployment.
+
+However, existing HUD hierarchy, exposed demand/finance presentation, progression presentation, service/policy prominence and growth pacing must be audited against GDD v2.0 before reuse.
+
+Do not polish the current UI as-is. The next production phase is a **Core Experience Rebuild / Vertical Slice v2** proving:
+1. first-road → explosive autonomous growth;
+2. city-readable cause/effect;
+3. one emergent structural problem;
+4. one satisfying intervention/recovery;
+5. portrait-phone visual hierarchy with the city as the primary surface.
