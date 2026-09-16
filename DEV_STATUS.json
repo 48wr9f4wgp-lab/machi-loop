@@ -1,16 +1,16 @@
 {
   "schema": 1,
-  "phase": "主要機能実装",
+  "phase": "Release Readiness / 実機QA",
   "checks": {
     "boot": "ok",
-    "test": "warn",
-    "device": "ok",
-    "save": "none",
-    "analytics": "none",
-    "performance": "none",
+    "test": "ok",
+    "device": "warn",
+    "save": "ok",
+    "analytics": "ok",
+    "performance": "ok",
     "release": "warn"
   },
-  "next": "現行の主要機能と初回導線を実機で再確認する",
-  "note": "Web実機起動は過去に確認済み。公開前最終版としては扱わない。",
-  "updated_at": "2026-09-15"
+  "next": "現行mainをiPhone実機でVisual/UX/FTUE監査し、hard blockerをfix-onlyで解消する",
+  "note": "v0.22A Feedback、Road-only demolition、Release Guard、Visual World Pass 2、Analytics、Performance、Observabilityを統合済み。Web/PWA実機確認は必要。Native iOS/AndroidとStore申請は未実施。",
+  "updated_at": "2026-09-16"
 }
