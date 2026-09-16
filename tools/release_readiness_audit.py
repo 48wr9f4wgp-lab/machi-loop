@@ -33,7 +33,13 @@ PII_PROPERTY_PATTERNS = {
     "analytics email property": re.compile(r"[\"'](?:email|e_mail)[\"']\s*[:=]"),
     "analytics precise location property": re.compile(r"[\"'](?:precise_gps|gps_lat|gps_lon|latitude|longitude|address)[\"']\s*[:=]"),
 }
-ALLOWED_ABSOLUTE_PATH_FILES = {"tools/release_readiness_audit.py"}
+# The observability schema fixture intentionally contains representative unsafe
+# absolute paths to prove they are rejected/sanitized. Excluding that fixture
+# avoids treating security-test vectors as repository leaks.
+ALLOWED_ABSOLUTE_PATH_FILES = {
+    "tools/release_readiness_audit.py",
+    "tests/observability_schema_test.gd",
+}
 
 def iter_repo_files():
     for path in ROOT.rglob("*"):
