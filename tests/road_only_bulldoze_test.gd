@@ -9,6 +9,9 @@ func _run() -> void:
         _fail("main.gd failed to load")
         return
     var game: Node = game_script.new() as Node
+    var controller: Node = load("res://feedback/feedback_controller.gd").new()
+    root.add_child(controller)
+    game.v22_feedback = controller
     game._init_grid()
     game.cash = 1000
 
@@ -49,6 +52,8 @@ func _run() -> void:
         _fail("arterial salvage recovery regressed")
         return
 
+    controller.free()
+    game.free()
     print("ROAD_ONLY_BULLDOZE_OK")
     quit(0)
 

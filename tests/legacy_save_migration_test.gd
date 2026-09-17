@@ -5,7 +5,12 @@ const SAVE_PATH: String = "user://machi_loop_save_v1.json"
 const SAVE_TEMP: String = "user://machi_loop_save_v1.tmp"
 const SAVE_BACKUP: String = "user://machi_loop_save_v1.backup.json"
 
+var failures: int = 0
+
 func _init() -> void:
+    call_deferred("_run")
+
+func _run() -> void:
     _cleanup()
     var legacy_script: Script = load("res://main_v18_services.gd") as Script
     var current_script: Script = load("res://main.gd") as Script
@@ -43,11 +48,14 @@ func _init() -> void:
     file.close()
     var parsed: Variant = JSON.parse_string(raw)
     _require(parsed is Dictionary, "migrated save is not valid JSON")
-    _require(int((parsed as Dictionary).get("schema_version", 0)) == 5, "legacy save was not rewritten to schema v5")
+    _require(int((parsed as Dictionary).get("schema_version", 0)) == 6, "legacy save was not rewritten to schema v6")
 
+    legacy.free()
+    current.free()
     _cleanup()
-    print("LEGACY_SAVE_MIGRATION_OK")
-    quit(0)
+    if failures == 0:
+        print("LEGACY_SAVE_MIGRATION_OK")
+    quit(1 if failures > 0 else 0)
 
 func _cleanup() -> void:
     for path: String in [SAVE_PATH, SAVE_TEMP, SAVE_BACKUP]:
@@ -57,6 +65,5 @@ func _cleanup() -> void:
 func _require(condition: bool, message: String) -> void:
     if condition:
         return
+    failures += 1
     push_error("LEGACY_SAVE_MIGRATION_FAILED: " + message)
-    _cleanup()
-    quit(1)

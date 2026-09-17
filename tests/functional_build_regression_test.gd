@@ -6,12 +6,18 @@ const SAVE_BACKUP: String = "user://machi_loop_save_v1.backup.json"
 const FTUE_PATH: String = "user://machi_loop_ftue_v1.json"
 const FTUE_TEMP: String = "user://machi_loop_ftue_v1.tmp"
 
+var failures: int = 0
+
 func _init() -> void:
+    call_deferred("_run")
+
+func _run() -> void:
     _cleanup()
     var game_script: Script = load("res://main.gd") as Script
     _require(game_script != null, "main.gd must load")
 
     var game: Node = game_script.new() as Node
+    _prepare_feedback(game)
     game._init_grid()
     game.rng.seed = 210021
     _require(int(game.cash) == 700 and int(game.city_level) == 1, "fresh city state invalid")
@@ -23,7 +29,11 @@ func _init() -> void:
         game.drag_path.append(Vector2i(x, 10))
     game._commit_arterial()
     _require(int(game._count_cells(1)) >= 6, "main-road commit failed")
-    _require(int(game.cash) < 700, "road construction did not charge cash")
+    # The first-road goal refunds 80 after the six cells cost 72.
+    var goal_rewards: int = 0
+    for stage: int in range(int(game.v08_goal_stage)):
+        goal_rewards += int(game.V08_GOAL_REWARDS[stage])
+    _require(int(game.cash) == 700 - 6 * int(game.ROAD_COST) + goal_rewards, "road cost or goal reward accounting changed")
     _require(int(game.v08_goal_stage) >= 1, "first road reward/goal did not trigger")
 
     # City must react and keep growing without manual local-road/building placement.
@@ -63,6 +73,7 @@ func _init() -> void:
 
     # The planned maximum tier must be mechanically reachable.
     var max_city: Node = game_script.new() as Node
+    _prepare_feedback(max_city)
     max_city._init_grid()
     max_city.cash = 20000
     max_city.unlocked_cols = 16
@@ -78,9 +89,14 @@ func _init() -> void:
     _require(int(max_city.city_level) == 6, "metropolitan tier is unreachable")
     _require(int(max_city.unlocked_cols) == 16, "maximum tier did not retain full land access")
 
+    game.v22_feedback.free()
+    max_city.v22_feedback.free()
+    game.free()
+    max_city.free()
     _cleanup()
-    print("FUNCTIONAL_BUILD_REGRESSION_OK")
-    quit(0)
+    if failures == 0:
+        print("FUNCTIONAL_BUILD_REGRESSION_OK")
+    quit(1 if failures > 0 else 0)
 
 func _cleanup() -> void:
     for path: String in [SAVE_PATH, SAVE_TEMP, SAVE_BACKUP, FTUE_PATH, FTUE_TEMP]:
@@ -90,6 +106,10 @@ func _cleanup() -> void:
 func _require(condition: bool, message: String) -> void:
     if condition:
         return
+    failures += 1
     push_error("FUNCTIONAL_BUILD_REGRESSION_FAILED: " + message)
-    _cleanup()
-    quit(1)
+
+func _prepare_feedback(game: Node) -> void:
+    var controller: Node = load("res://feedback/feedback_controller.gd").new()
+    root.add_child(controller)
+    game.v22_feedback = controller
