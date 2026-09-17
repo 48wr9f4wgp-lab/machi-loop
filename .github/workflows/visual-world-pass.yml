@@ -10,10 +10,12 @@ on:
       - "main_v25_city_density.gd"
       - "main_v26_urban_hierarchy.gd"
       - "main_v27_growth_delight.gd"
+      - "main_v28_city_birth_sequence.gd"
       - "tests/visual_world_pass_test.gd"
       - "tests/v25_city_density_test.gd"
       - "tests/v26_urban_hierarchy_test.gd"
       - "tests/v27_growth_delight_test.gd"
+      - "tests/v28_city_birth_sequence_test.gd"
       - ".github/workflows/visual-world-pass.yml"
   workflow_dispatch:
 
@@ -46,6 +48,9 @@ jobs:
 
       - name: Growth delight fixture
         run: godot --headless --path . --script res://tests/v27_growth_delight_test.gd
+
+      - name: City birth sequence fixture
+        run: godot --headless --path . --script res://tests/v28_city_birth_sequence_test.gd
 
       - name: Existing renderer regression
         run: godot --headless --path . --script res://tests/render_fixture_test.gd
