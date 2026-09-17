@@ -17,6 +17,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Prime Godot project metadata
-        run: godot --headless --path . --editor --quit-after 1
+        run: godot --headless --path . --editor --import
       - name: Road-only bulldoze fixture
-        run: godot --headless --path . --script res://tests/road_only_bulldoze_test.gd
+        run: bash tools/run_godot_fixture.sh res://tests/road_only_bulldoze_test.gd

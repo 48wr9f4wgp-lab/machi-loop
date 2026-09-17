@@ -16,14 +16,14 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --editor --quit-after 1
+          godot --headless --path . --editor --import
       - name: Feedback controller fixture
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/feedback_controller_test.gd
+          bash tools/run_godot_fixture.sh res://tests/feedback_controller_test.gd
       - name: Feedback save migration fixture
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/feedback_save_migration_test.gd
+          bash tools/run_godot_fixture.sh res://tests/feedback_save_migration_test.gd

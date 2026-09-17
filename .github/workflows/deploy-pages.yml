@@ -76,7 +76,7 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --editor --quit-after 1 --verbose
+          godot --headless --path . --editor --import --verbose
 
       - name: Runtime smoke test
         shell: bash
@@ -92,73 +92,73 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/demand_model_test.gd
+          bash tools/run_godot_fixture.sh res://tests/demand_model_test.gd
 
       - name: Traffic model fixture
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/traffic_model_test.gd
+          bash tools/run_godot_fixture.sh res://tests/traffic_model_test.gd
 
       - name: Economy model fixture
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/economy_model_test.gd
+          bash tools/run_godot_fixture.sh res://tests/economy_model_test.gd
 
       - name: Service model fixture
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/service_model_test.gd
+          bash tools/run_godot_fixture.sh res://tests/service_model_test.gd
 
       - name: Progression model fixture
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/progression_model_test.gd
+          bash tools/run_godot_fixture.sh res://tests/progression_model_test.gd
 
       - name: FTUE model fixture
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/ftue_model_test.gd
+          bash tools/run_godot_fixture.sh res://tests/ftue_model_test.gd
 
       - name: FTUE persistence fixture
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/ftue_persistence_test.gd
+          bash tools/run_godot_fixture.sh res://tests/ftue_persistence_test.gd
 
       - name: Production asset catalog fixture
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/asset_catalog_test.gd
+          bash tools/run_godot_fixture.sh res://tests/asset_catalog_test.gd
 
       - name: 3D renderer fixture
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/render_fixture_test.gd
+          bash tools/run_godot_fixture.sh res://tests/render_fixture_test.gd
 
       - name: Save safety fixture
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/save_fixture_test.gd
+          bash tools/run_godot_fixture.sh res://tests/save_fixture_test.gd
 
       - name: Legacy save migration fixture
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/legacy_save_migration_test.gd
+          bash tools/run_godot_fixture.sh res://tests/legacy_save_migration_test.gd
 
       - name: Functional Build regression gate
         shell: bash
         run: |
           set -euxo pipefail
-          godot --headless --path . --script res://tests/functional_build_regression_test.gd
+          bash tools/run_godot_fixture.sh res://tests/functional_build_regression_test.gd
 
       - name: Export Godot Web build
         shell: bash

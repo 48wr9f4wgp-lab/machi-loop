@@ -1,1 +1,1 @@
-extends "res://main_v22_road_guard.gd"
+extends "res://main_v23_core_experience.gd"
