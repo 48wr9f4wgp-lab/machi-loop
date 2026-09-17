@@ -33,12 +33,15 @@ func _run() -> void:
         game.grid[y][7] = game.Cell.ARTERIAL
 
     for p: Vector2i in [
-        Vector2i(5, 9), Vector2i(6, 9), Vector2i(8, 9), Vector2i(9, 9),
+        Vector2i(5, 9), Vector2i(8, 9), Vector2i(9, 9),
         Vector2i(5, 11), Vector2i(6, 11), Vector2i(8, 11), Vector2i(9, 11)
     ]:
         game.grid[p.y][p.x] = game.Cell.RESIDENTIAL
 
-    for p: Vector2i in [Vector2i(6, 8), Vector2i(8, 8), Vector2i(6, 12), Vector2i(8, 12)]:
+    # The junction is at (7,10). Include one commercial parcel within the
+    # v0.26 core radius (Manhattan distance <= 2) so the fixture actually
+    # exercises the road-defined center rule rather than only its rejection path.
+    for p: Vector2i in [Vector2i(6, 9), Vector2i(6, 8), Vector2i(8, 8), Vector2i(6, 12), Vector2i(8, 12)]:
         game.grid[p.y][p.x] = game.Cell.COMMERCIAL
 
     for p: Vector2i in [Vector2i(4, 9), Vector2i(10, 11)]:
