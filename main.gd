@@ -1,1 +1,1 @@
-extends "res://main_v24_visual_north_star.gd"
+extends "res://main_v25_city_density.gd"
