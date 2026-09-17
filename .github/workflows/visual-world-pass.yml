@@ -4,8 +4,12 @@ on:
   pull_request:
     branches: ["main"]
     paths:
+      - "main.gd"
       - "main_v21_visual_pass2.gd"
+      - "main_v24_visual_north_star.gd"
+      - "main_v25_city_density.gd"
       - "tests/visual_world_pass_test.gd"
+      - "tests/v25_city_density_test.gd"
       - ".github/workflows/visual-world-pass.yml"
   workflow_dispatch:
 
@@ -29,6 +33,9 @@ jobs:
 
       - name: Visual world fixture
         run: godot --headless --path . --script res://tests/visual_world_pass_test.gd
+
+      - name: City density fixture
+        run: godot --headless --path . --script res://tests/v25_city_density_test.gd
 
       - name: Existing renderer regression
         run: godot --headless --path . --script res://tests/render_fixture_test.gd
