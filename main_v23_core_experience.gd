@@ -79,7 +79,7 @@ func _v23_draw_primary_tools(bottom: Rect2, font: Font) -> void:
     var y: float = bottom.position.y + 18.0
     for i: int in range(3):
         var rect: Rect2 = Rect2(16.0 + float(i) * (w + gap), y, w, 54.0)
-        var active: bool = mode == i
+        var active: bool = current_tool == i
         draw_rect(rect, Color("#174B38") if active else Color("#E2E8E3"))
         draw_rect(rect, Color("#174B38"), false, 1.0)
         draw_string(font, rect.position + Vector2(6.0, 33.0), labels[i], HORIZONTAL_ALIGNMENT_CENTER, rect.size.x - 12.0, 11, Color("#FFFFFF") if active else Color("#244A3B"))
