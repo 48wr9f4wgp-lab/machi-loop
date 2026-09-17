@@ -1,1 +1,1 @@
-extends "res://main_v25_city_density.gd"
+extends "res://main_v26_urban_hierarchy.gd"
