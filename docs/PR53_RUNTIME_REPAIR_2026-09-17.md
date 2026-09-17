@@ -33,7 +33,7 @@ baseline `54d5a38784483d7ee21e371a5faa02783a575820`:
 
 Two fixture helpers previously called `quit(1)` and subsequently overwrote it
 with `quit(0)`. They now retain failure counts and report a failing final exit.
-The build, feedback and road-only workflows use `tools/run_godot_fixture.py`
+The build, feedback and road-only workflows use `tools/run_godot_fixture.sh`
 to reject script errors and assertion-failure diagnostics even with zero exit.
 A deliberately failing zero-exit fixture was verified to be rejected.
 
@@ -56,3 +56,7 @@ no claim of leak-free runtime, physical-device performance or visual quality.
 No save schema or runtime save behavior is changed by this repair.
 Recovery: retain the PR branch and previous main; reverse only these commits
 if needed, without rewriting history or removing player data.
+
+The standalone feedback/road CI containers lack Python. The runner uses Bash
+without adding a runtime dependency. These workflows and the build now wait
+for editor import completion (`--import`) instead of aborting after one frame.
