@@ -11,11 +11,13 @@ on:
       - "main_v26_urban_hierarchy.gd"
       - "main_v27_growth_delight.gd"
       - "main_v28_city_birth_sequence.gd"
+      - "main_v29_congestion_recovery.gd"
       - "tests/visual_world_pass_test.gd"
       - "tests/v25_city_density_test.gd"
       - "tests/v26_urban_hierarchy_test.gd"
       - "tests/v27_growth_delight_test.gd"
       - "tests/v28_city_birth_sequence_test.gd"
+      - "tests/v29_congestion_recovery_test.gd"
       - ".github/workflows/visual-world-pass.yml"
   workflow_dispatch:
 
@@ -51,6 +53,9 @@ jobs:
 
       - name: City birth sequence fixture
         run: godot --headless --path . --script res://tests/v28_city_birth_sequence_test.gd
+
+      - name: Congestion recovery fixture
+        run: godot --headless --path . --script res://tests/v29_congestion_recovery_test.gd
 
       - name: Existing renderer regression
         run: godot --headless --path . --script res://tests/render_fixture_test.gd
