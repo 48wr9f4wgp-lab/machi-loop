@@ -19,18 +19,24 @@ var v35_drag_axis: int = V35Axis.NONE
 var v35_drag_origin_screen: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
+    # Critical ordering: widen the playable footprint BEFORE the inherited
+    # renderer creates its first visible static city. The original v0.35 did a
+    # second full rebuild after renderer setup, which produced an all-black
+    # replacement city on physical iPhone/Web.
+    _v35_prepare_width_before_renderer()
     super._ready()
+    queue_redraw()
 
-    # The old fresh map exposed only 8 / 16 columns, which made the usable
-    # city footprint feel like a narrow strip on iPhone. Keep the same backing
-    # grid and save format, but expose 12 columns from the start.
-    var desired: int = _v35_desired_unlocked_cols(population)
-    if unlocked_cols < desired:
-        unlocked_cols = desired
-        _v10_sync_scene(true)
-        _v24_apply_camera()
-        _v07_save_city()
-        queue_redraw()
+# Save restore happens in the inherited ready chain before the 3D renderer is
+# constructed. Normalize legacy 8/11-column saves here so the renderer still
+# receives the final width on its first build instead of requiring a hot rebuild.
+func _v07_load_city() -> bool:
+    var loaded: bool = super._v07_load_city()
+    _v35_prepare_width_before_renderer()
+    return loaded
+
+func _v35_prepare_width_before_renderer() -> void:
+    unlocked_cols = maxi(unlocked_cols, _v35_desired_unlocked_cols(population))
 
 func _pointer_down(pos: Vector2) -> void:
     super._pointer_down(pos)

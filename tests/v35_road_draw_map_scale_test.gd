@@ -5,8 +5,11 @@ const GameClass = preload("res://main_v35_road_draw_map_scale.gd")
 func _init() -> void:
     var game = GameClass.new()
     game._init_grid()
-    game.unlocked_cols = game.V35_MIN_OPEN_COLS
+    game.unlocked_cols = game.START_UNLOCKED_COLS
+    game.population = 0
+    game._v35_prepare_width_before_renderer()
 
+    _expect(game.unlocked_cols == 12, "pre-render width normalization failed")
     _expect(game.V35_MIN_OPEN_COLS == 12, "fresh build area must expose 12 columns")
     _expect(game.V35_MIN_OPEN_COLS > game.START_UNLOCKED_COLS, "v0.35 did not widen early map")
     _expect(game.V35_MIN_OPEN_COLS <= game.GRID_W, "fresh build width exceeds backing grid")
@@ -15,6 +18,14 @@ func _init() -> void:
     _expect(game._v35_desired_unlocked_cols(90) == 14, "tier2 width mismatch")
     _expect(game._v35_desired_unlocked_cols(199) == 14, "tier2 width regressed")
     _expect(game._v35_desired_unlocked_cols(200) == 16, "tier3 width mismatch")
+
+    # Regression for the physical-iPhone black-map failure: v0.35 must not
+    # force a second full static-city rebuild from its ready hook.
+    var source: String = FileAccess.get_file_as_string("res://main_v35_road_draw_map_scale.gd")
+    var ready_start: int = source.find("func _ready() -> void:")
+    var pointer_start: int = source.find("func _pointer_down", ready_start)
+    var ready_block: String = source.substr(ready_start, pointer_start - ready_start)
+    _expect(not ready_block.contains("_v10_sync_scene(true)"), "ready hook reintroduced forced full rebuild")
 
     var origin := Vector2i(4, 8)
 
