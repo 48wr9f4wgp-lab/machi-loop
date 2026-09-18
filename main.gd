@@ -1,1 +1,1 @@
-extends "res://main_v32_incremental_renderer.gd"
+extends "res://main_v33_reset_control.gd"
