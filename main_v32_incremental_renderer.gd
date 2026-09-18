@@ -21,6 +21,13 @@ var v32_incremental_sync_count: int = 0
 var v32_incremental_cell_count: int = 0
 
 func _v10_sync_scene(force: bool = false) -> void:
+    # Headless regression fixtures instantiate the game without attaching the
+    # 3D renderer. Preserve the inherited no-op behavior until StaticCity exists;
+    # otherwise an uninitialized material/root can be touched by incremental work.
+    if not is_instance_valid(v10_static_root):
+        super._v10_sync_scene(force)
+        return
+
     if force or not v32_snapshot_ready:
         _v32_full_sync()
         return
