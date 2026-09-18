@@ -1,1 +1,1 @@
-extends "res://main_v36_1_expansion_reveal.gd"
+extends "res://main_v37_recovery_device_test.gd"
