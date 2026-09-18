@@ -3,17 +3,17 @@
   "title": "AXIVA",
   "reading": "アクシヴァ",
   "legacy_title_alias": "MACHI LOOP",
-  "phase": "Release Readiness / 実機QA",
+  "phase": "VERTICAL_SLICE",
   "checks": {
     "boot": "ok",
     "test": "ok",
     "device": "warn",
     "save": "ok",
     "analytics": "ok",
-    "performance": "ok",
+    "performance": "warn",
     "release": "warn"
   },
-  "next": "現行mainをiPhone実機でVisual/UX/FTUE監査し、hard blockerをfix-onlyで解消する",
-  "note": "v0.22A Feedback、Road-only demolition、Release Guard、Visual World Pass 2、Analytics、Performance、Observabilityを統合済み。Web/PWA実機確認は必要。Native iOS/AndroidとStore申請は未実施。",
-  "updated_at": "2026-09-18"
+  "next": "iPhoneで?fresh=1を使い、empty land→first road→city born→growth→congestion→intervention→recoveryを1セッション通しで記録・検証する",
+  "note": "v0.37までのcomponent device checksはPASS。Recovery component、Expansion Camera、Road Input、Map Scale、Device Stabilityは実機確認済み。ただしVertical Slice v2のexitに必要なfresh-to-recovery通し実機runと、Master v2.4のDevice Validation（save/load、cold launch、suspend/resume、interruption、frame pacing、thermal/battery、resource dead-end等）は未完了。PRODUCTION_DECISION=UNDECIDED / RELEASE_APPROVAL=NOT_REQUESTED。",
+  "updated_at": "2026-09-19"
 }
