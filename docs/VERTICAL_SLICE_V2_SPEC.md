@@ -1,11 +1,11 @@
-# MACHI LOOP — Vertical Slice v2 Spec
+# AXIVA — Vertical Slice v2 Spec
 
 Status: Proposed implementation specification
 Date: 2026-09-16
 Depends on: GDD v2.0, SUCCESS_DEFINITION_V2
 
 ## 1. Slice question
-Can MACHI LOOP make the player feel that one road caused a living city to emerge, then turn that growth into a readable strategic problem and satisfying recovery?
+Can AXIVA make the player feel that one road caused a living city to emerge, then turn that growth into a readable strategic problem and satisfying recovery?
 
 Everything in this slice serves that question.
 
