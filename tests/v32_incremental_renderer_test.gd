@@ -5,6 +5,12 @@ const GameClass = preload("res://main_v32_incremental_renderer.gd")
 func _init() -> void:
     var game = GameClass.new()
     game._init_grid()
+
+    # Functional/headless fixtures may exercise simulation before renderer setup.
+    # Renderer sync must remain a safe no-op and must not arm incremental state.
+    game._v10_sync_scene()
+    _expect(not game.v32_snapshot_ready, "renderer-less sync armed incremental snapshot")
+
     game._v32_capture_snapshot()
     game.v32_snapshot_ready = true
 
