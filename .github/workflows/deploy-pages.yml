@@ -186,6 +186,45 @@ jobs:
           <meta name="theme-color" content="#17251F">
           <link rel="apple-touch-icon" sizes="192x192" href="machi-loop-icon-final-192.png">
           <link rel="manifest" href="manifest.webmanifest">
+          <style>
+          html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            overscroll-behavior: none;
+            background: #17251F;
+          }
+          body {
+            position: fixed;
+            inset: 0;
+            min-height: 100%;
+            touch-action: none;
+          }
+          @supports (height: 100dvh) {
+            html, body { height: 100dvh; }
+          }
+          #canvas {
+            display: block;
+            touch-action: none;
+          }
+          </style>
+          <script>
+          (function () {
+            function lockAxivaViewport() {
+              window.scrollTo(0, 0);
+              document.documentElement.scrollTop = 0;
+              document.body.scrollTop = 0;
+            }
+            window.addEventListener('load', lockAxivaViewport, {passive:true});
+            window.addEventListener('resize', lockAxivaViewport, {passive:true});
+            if (window.visualViewport) {
+              window.visualViewport.addEventListener('resize', lockAxivaViewport, {passive:true});
+              window.visualViewport.addEventListener('scroll', lockAxivaViewport, {passive:true});
+            }
+          })();
+          </script>
           <script>
           (async function () {
             try {
