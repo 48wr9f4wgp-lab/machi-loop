@@ -1,6 +1,6 @@
 extends Node2D
 
-# MACHI LOOP — portrait-first mobile vertical slice 0.3
+# AXIVA — portrait-first mobile vertical slice 0.3
 # Core loop: draw arterial -> local roads/buildings auto-grow -> congestion -> widen roads -> expand.
 
 enum Cell { EMPTY, ARTERIAL, LOCAL, RESIDENTIAL, COMMERCIAL, INDUSTRIAL }
@@ -106,7 +106,7 @@ func _draw() -> void:
 func _draw_header(size: Vector2) -> void:
     draw_rect(Rect2(0.0, 0.0, size.x, TOP_H), Color("#17251F"))
     var font: Font = ThemeDB.fallback_font
-    draw_string(font, Vector2(MARGIN + 4.0, 34.0), "MACHI LOOP", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 27, Color.WHITE)
+    draw_string(font, Vector2(MARGIN + 4.0, 34.0), "AXIVA", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 27, Color.WHITE)
     draw_string(font, Vector2(MARGIN + 4.0, 60.0), "BUILD THE FLOW. LET THE CITY GROW.", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13, Color("#A9C7B9"))
 
     var line1: String = "POP %d   CASH Y%d   LV %d" % [population, cash, city_level]
