@@ -1,1 +1,1 @@
-extends "res://main_v31_device_stability.gd"
+extends "res://main_v32_incremental_renderer.gd"
