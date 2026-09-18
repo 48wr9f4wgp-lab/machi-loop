@@ -19,6 +19,16 @@ func _init() -> void:
     var disconnected: Dictionary = TrafficModel.calculate(180, 120, 500.0, 18, 8, 0, 1, 6, 2, 0)
     _require(str(disconnected["cause"]) == "disconnected", "fragmented roads should expose a clear cause")
 
+    # v0.39: the first-road topology must naturally become a structural problem
+    # as demand matures, while a redundant route must materially recover it.
+    var early_single: Dictionary = TrafficModel.calculate(70, 24, 300.0, 14, 8, 0, 2, 4, 1, 0)
+    var mature_single: Dictionary = TrafficModel.calculate(220, 90, 300.0, 14, 8, 0, 2, 4, 1, 0)
+    var mature_loop: Dictionary = TrafficModel.calculate(220, 90, 300.0, 20, 14, 0, 4, 2, 1, 2)
+    _require(str(early_single["status"]) != "severe", "early first-road city must remain forgiving")
+    _require(str(mature_single["status"]) == "severe", "mature cycle-free city must surface structural pressure")
+    _require(str(mature_single["cause"]) in ["no_redundancy", "dead_ends"], "mature single route must expose a structural cause")
+    _require(float(mature_loop["congestion"]) <= float(mature_single["congestion"]) - 12.0, "redundant bypass must materially reduce mature pressure")
+
     print("Traffic model fixture passed")
     quit(0)
 
