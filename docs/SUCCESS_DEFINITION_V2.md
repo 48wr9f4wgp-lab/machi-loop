@@ -1,4 +1,4 @@
-# MACHI LOOP — Success Definition v2
+# AXIVA — Success Definition v2
 
 Status: Proposed gate for Core Experience Rebuild / Vertical Slice v2
 Date: 2026-09-16

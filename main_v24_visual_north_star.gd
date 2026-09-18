@@ -144,7 +144,7 @@ func _v23_draw_city_first_shell() -> void:
     var top: Rect2 = Rect2(0.0, 0.0, size.x, V24_TOP_H)
     draw_rect(top, Color("#F3F0E6"))
     draw_line(Vector2(0.0, top.end.y), Vector2(size.x, top.end.y), Color("#CFD5CB"), 1.0)
-    draw_string(font, Vector2(16.0, 27.0), "MACHI LOOP", HORIZONTAL_ALIGNMENT_LEFT, 154.0, 17, Color("#173E30"))
+    draw_string(font, Vector2(16.0, 27.0), "AXIVA", HORIZONTAL_ALIGNMENT_LEFT, 154.0, 17, Color("#173E30"))
     draw_string(font, Vector2(16.0, 51.0), _v23_stage_name(), HORIZONTAL_ALIGNMENT_LEFT, 190.0, 9, Color("#667D70"))
     draw_string(font, Vector2(size.x - 184.0, 29.0), "人口 %d" % population, HORIZONTAL_ALIGNMENT_RIGHT, 80.0, 10, Color("#214638"))
     draw_string(font, Vector2(size.x - 96.0, 29.0), "¥%d" % cash, HORIZONTAL_ALIGNMENT_RIGHT, 82.0, 10, Color("#214638"))

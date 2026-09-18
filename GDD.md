@@ -1,11 +1,13 @@
-# MACHI LOOP — GDD v2.0
+# AXIVA — GDD v2.0
 
 Status: Proposed canonical game-specific GDD after concept relock
+Official title: AXIVA（アクシヴァ）
+Legacy title alias: MACHI LOOP
 Date: 2026-09-16
 Supersedes on merge: GDD v1.0
 
 ## 1. Product thesis
-MACHI LOOP is a portrait 3D city-growth simulation about causing a living city to emerge from a small number of high-leverage planning decisions.
+AXIVA is a portrait 3D city-growth simulation about causing a living city to emerge from a small number of high-leverage planning decisions.
 
 **Player-facing promise:**
 > 一本の道から、街が生まれる。
@@ -130,7 +132,7 @@ Do not surface these primarily as random debuffs. The phenomenon should be visib
 Negative states must remain recoverable. A weak decision should create an interesting repair problem, not an unrecoverable dead city.
 
 ## 8. Challenge model
-MACHI LOOP has no ordinary fail screen. Difficulty comes from the fact that successful growth creates new complexity.
+AXIVA has no ordinary fail screen. Difficulty comes from the fact that successful growth creates new complexity.
 
 The player should repeatedly experience:
 > "The city grew because of what I did; now that growth created a new problem I need to understand."

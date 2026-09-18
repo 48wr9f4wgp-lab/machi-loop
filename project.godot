@@ -1,9 +1,9 @@
 ; Engine configuration file.
-; MACHI LOOP vertical slice 0.3 — portrait-first mobile web
+; AXIVA vertical slice 0.3 — portrait-first mobile web
 config_version=5
 
 [application]
-config/name="MACHI LOOP"
+config/name="AXIVA"
 run/main_scene="res://main.tscn"
 config/icon="res://assets/app/machi-loop-icon-final.svg"
 

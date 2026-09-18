@@ -24,7 +24,7 @@ func _draw_header(size: Vector2) -> void:
     draw_rect(Rect2(0.0, TOP_H - 3.0, size.x, 3.0), Color("#71D0A2"))
     var latin: Font = ThemeDB.fallback_font
 
-    draw_string(latin, Vector2(MARGIN + 4.0, 28.0), "MACHI LOOP", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 24, Color("#F7FFF9"))
+    draw_string(latin, Vector2(MARGIN + 4.0, 28.0), "AXIVA", HORIZONTAL_ALIGNMENT_LEFT, -1.0, 24, Color("#F7FFF9"))
     draw_string(v11_font, Vector2(MARGIN + 4.0, 47.0), "街の流れをつくり、都市を育てる。", HORIZONTAL_ALIGNMENT_LEFT, size.x - 110.0, 10, Color("#9BC9B4"))
 
     var level_rect: Rect2 = Rect2(size.x - 68.0, 12.0, 54.0, 25.0)

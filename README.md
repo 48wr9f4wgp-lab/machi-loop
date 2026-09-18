@@ -1,4 +1,4 @@
-# MACHI LOOP
+# AXIVA
 
 Mobile-first city simulation vertical slice.
 
@@ -32,7 +32,7 @@ One-time GitHub setting:
 
 1. Repository → Settings → Pages.
 2. Build and deployment → Source → `GitHub Actions`.
-3. Open Actions and confirm `Build and deploy MACHI LOOP` succeeds.
+3. Open Actions and confirm `Build and deploy AXIVA` succeeds.
 4. Open the Pages URL in Safari.
 
 The Web preset intentionally disables Godot Web thread support for broad static-host compatibility.

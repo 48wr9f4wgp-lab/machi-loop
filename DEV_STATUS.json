@@ -1,5 +1,8 @@
 {
   "schema": 1,
+  "title": "AXIVA",
+  "reading": "アクシヴァ",
+  "legacy_title_alias": "MACHI LOOP",
   "phase": "Release Readiness / 実機QA",
   "checks": {
     "boot": "ok",
@@ -12,5 +15,5 @@
   },
   "next": "現行mainをiPhone実機でVisual/UX/FTUE監査し、hard blockerをfix-onlyで解消する",
   "note": "v0.22A Feedback、Road-only demolition、Release Guard、Visual World Pass 2、Analytics、Performance、Observabilityを統合済み。Web/PWA実機確認は必要。Native iOS/AndroidとStore申請は未実施。",
-  "updated_at": "2026-09-16"
+  "updated_at": "2026-09-18"
 }

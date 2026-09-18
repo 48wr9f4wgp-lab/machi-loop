@@ -1,4 +1,4 @@
-name: Build and deploy MACHI LOOP
+name: Build and deploy AXIVA
 
 on:
   push:
@@ -182,7 +182,7 @@ jobs:
           <meta name="apple-mobile-web-app-capable" content="yes">
           <meta name="mobile-web-app-capable" content="yes">
           <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-          <meta name="apple-mobile-web-app-title" content="MACHI LOOP">
+          <meta name="apple-mobile-web-app-title" content="AXIVA">
           <meta name="theme-color" content="#17251F">
           <link rel="apple-touch-icon" sizes="192x192" href="machi-loop-icon-final-192.png">
           <link rel="manifest" href="manifest.webmanifest">
@@ -220,7 +220,7 @@ jobs:
           fi
 
           cat > build/web/manifest.webmanifest <<'EOF'
-          {"name":"MACHI LOOP","short_name":"MACHI LOOP","start_url":"./","scope":"./","display":"standalone","orientation":"portrait","background_color":"#17251F","theme_color":"#17251F","icons":[{"src":"machi-loop-icon-final-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"machi-loop-icon-final-512.png","sizes":"512x512","type":"image/png","purpose":"any"}]}
+          {"name":"AXIVA","short_name":"AXIVA","start_url":"./","scope":"./","display":"standalone","orientation":"portrait","background_color":"#17251F","theme_color":"#17251F","icons":[{"src":"machi-loop-icon-final-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"machi-loop-icon-final-512.png","sizes":"512x512","type":"image/png","purpose":"any"}]}
           EOF
 
       - name: Verify Web build
