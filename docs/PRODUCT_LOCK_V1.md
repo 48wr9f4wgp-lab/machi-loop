@@ -1,16 +1,18 @@
-# MACHI LOOP — Product Lock v1.0
+# AXIVA — Product Lock v1.0
 
 Status: Locked for Functional Build
+Official title: AXIVA（アクシヴァ）
+Legacy title alias: MACHI LOOP
 Date: 2026-08-24
 Authority: game-specific specification; overrides generic project rules where applicable.
 
 ## Product statement
-MACHI LOOP is a portrait mobile 3D city-management simulation where the player designs only the main roads and the city automatically generates local streets, buildings and growth around that structure.
+AXIVA is a portrait mobile 3D city-management simulation where the player designs only the main roads and the city automatically generates local streets, buildings and growth around that structure.
 
 The product promise is: **keep the strategic pleasure of city planning while removing the repetitive micromanagement of drawing every local street and placing every basic building.**
 
 ## Context Lock
-- Product name: MACHI LOOP
+- Product name: AXIVA
 - Primary platforms: iOS / Android
 - Development preview: Web/PWA on GitHub Pages; preview technology is not the final distribution commitment.
 - Launch region: Japan first; English-ready from architecture/localization day one.
