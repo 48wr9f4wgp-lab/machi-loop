@@ -13,6 +13,7 @@ on:
       - "main_v28_city_birth_sequence.gd"
       - "main_v29_congestion_recovery.gd"
       - "main_v30_fresh_test_mode.gd"
+      - "main_v31_device_stability.gd"
       - "tests/visual_world_pass_test.gd"
       - "tests/v25_city_density_test.gd"
       - "tests/v26_urban_hierarchy_test.gd"
@@ -20,6 +21,7 @@ on:
       - "tests/v28_city_birth_sequence_test.gd"
       - "tests/v29_congestion_recovery_test.gd"
       - "tests/v30_fresh_test_mode_test.gd"
+      - "tests/v31_device_stability_test.gd"
       - ".github/workflows/visual-world-pass.yml"
   workflow_dispatch:
 
@@ -61,6 +63,9 @@ jobs:
 
       - name: Fresh device-test mode fixture
         run: godot --headless --path . --script res://tests/v30_fresh_test_mode_test.gd
+
+      - name: Device stability fixture
+        run: godot --headless --path . --script res://tests/v31_device_stability_test.gd
 
       - name: Existing renderer regression
         run: godot --headless --path . --script res://tests/render_fixture_test.gd
