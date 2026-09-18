@@ -1,1 +1,1 @@
-extends "res://main_v30_fresh_test_mode.gd"
+extends "res://main_v31_device_stability.gd"
