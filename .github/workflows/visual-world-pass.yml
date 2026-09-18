@@ -20,6 +20,7 @@ on:
       - "main_v35_road_draw_map_scale.gd"
       - "main_v36_expansion_camera.gd"
       - "main_v36_1_expansion_reveal.gd"
+      - "main_v37_recovery_device_test.gd"
       - "tests/visual_world_pass_test.gd"
       - "tests/v25_city_density_test.gd"
       - "tests/v26_urban_hierarchy_test.gd"
@@ -34,6 +35,7 @@ on:
       - "tests/v35_road_draw_map_scale_test.gd"
       - "tests/v36_expansion_camera_test.gd"
       - "tests/v36_1_expansion_reveal_test.gd"
+      - "tests/v37_recovery_device_test.gd"
       - "assets/jp_charset.txt"
       - ".github/workflows/visual-world-pass.yml"
   workflow_dispatch:
@@ -97,6 +99,9 @@ jobs:
 
       - name: Expansion reveal fixture
         run: godot --headless --path . --script res://tests/v36_1_expansion_reveal_test.gd
+
+      - name: Recovery device-test fixture
+        run: godot --headless --path . --script res://tests/v37_recovery_device_test.gd
 
       - name: Existing renderer regression
         run: godot --headless --path . --script res://tests/render_fixture_test.gd
