@@ -20,3 +20,5 @@ jobs:
         run: godot --headless --path . --editor --import
       - name: Road-only bulldoze fixture
         run: bash tools/run_godot_fixture.sh res://tests/road_only_bulldoze_test.gd
+      - name: Recoverable roads fixture
+        run: bash tools/run_godot_fixture.sh res://tests/v40_recoverable_roads_test.gd
