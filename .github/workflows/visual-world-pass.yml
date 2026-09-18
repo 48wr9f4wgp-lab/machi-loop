@@ -16,6 +16,7 @@ on:
       - "main_v31_device_stability.gd"
       - "main_v32_incremental_renderer.gd"
       - "main_v33_reset_control.gd"
+      - "main_v34_mobile_hud.gd"
       - "tests/visual_world_pass_test.gd"
       - "tests/v25_city_density_test.gd"
       - "tests/v26_urban_hierarchy_test.gd"
@@ -26,6 +27,8 @@ on:
       - "tests/v31_device_stability_test.gd"
       - "tests/v32_incremental_renderer_test.gd"
       - "tests/v33_reset_control_test.gd"
+      - "tests/v34_mobile_hud_test.gd"
+      - "assets/jp_charset.txt"
       - ".github/workflows/visual-world-pass.yml"
   workflow_dispatch:
 
@@ -76,6 +79,9 @@ jobs:
 
       - name: Reset control fixture
         run: godot --headless --path . --script res://tests/v33_reset_control_test.gd
+
+      - name: Mobile HUD and font fixture
+        run: godot --headless --path . --script res://tests/v34_mobile_hud_test.gd
 
       - name: Existing renderer regression
         run: godot --headless --path . --script res://tests/render_fixture_test.gd

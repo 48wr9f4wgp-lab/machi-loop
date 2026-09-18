@@ -1,1 +1,1 @@
-extends "res://main_v33_reset_control.gd"
+extends "res://main_v34_mobile_hud.gd"
