@@ -1,9 +1,10 @@
 class_name TrafficModel
 extends RefCounted
 
-# Pure strategic traffic-pressure model for MACHI LOOP Functional Build FB-2.
-# It intentionally avoids per-vehicle pathfinding. Network shape affects how much
-# of the nominal road capacity is actually useful.
+# AXIVA strategic traffic-pressure model.
+# Network shape affects how much nominal road capacity is actually useful.
+# v0.39 adds a demand concentration penalty for mature, cycle-free networks so
+# the natural one-arterial FTUE grows into the intended structural problem.
 
 static func calculate(
     population: int,
@@ -42,6 +43,14 @@ static func calculate(
     network_factor += widened_ratio * 0.04
     network_factor -= clampf(dead_end_ratio * 0.32, 0.0, 0.16)
     network_factor -= float(safe_components - 1) * 0.18
+
+    # A mature city that still has no alternate route concentrates trips on the
+    # original corridor. Keep the early city forgiving, then progressively
+    # expose the structural weakness. A real cycle removes the penalty.
+    if safe_components == 1 and cycle_count == 0 and population >= 90 and arterial_count >= 6:
+        var maturity: float = clampf((float(population) - 90.0) / 150.0, 0.0, 1.0)
+        network_factor -= 0.14 + maturity * 0.18
+
     network_factor = clampf(network_factor, 0.42, 1.12)
 
     var effective_capacity: float = maxf(1.0, raw_capacity * network_factor)
