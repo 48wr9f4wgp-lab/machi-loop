@@ -70,8 +70,15 @@ func _commit_arterial() -> void:
     else:
         _toast("LAND ACQUIRED %d  -Y%d" % [acquired_cells.size(), total_cost])
 
+    # v0.40 owns the mutation, so preserve the side effects normally supplied
+    # by inherited _commit_arterial() overrides that cannot be reached via super
+    # without re-running the legacy EMPTY-only commit.
     _recalculate_city()
+    _v08_evaluate_goal()
     _v07_save_city()
+    _v10_sync_scene()
+    if v29_recovery_stage in [V29_STAGE_PROBLEM, V29_STAGE_INTERVENTION]:
+        _v29_register_intervention(build_cells)
     queue_redraw()
 
 func _v40_can_route_arterial_through(cell: int) -> bool:
