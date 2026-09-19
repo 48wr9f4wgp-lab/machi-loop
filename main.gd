@@ -1,1 +1,1 @@
-extends "res://main_v40_land_acquisition.gd"
+extends "res://main_v41_camera_navigation.gd"
