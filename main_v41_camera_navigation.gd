@@ -161,8 +161,10 @@ func _v41_pair_points() -> Array[Vector2]:
 
     var keys: Array = v41_touches.keys()
     keys.sort()
-    result.append(v41_touches[keys[0]] as Vector2)
-    result.append(v41_touches[keys[1]] as Vector2)
+    var first: Vector2 = v41_touches[keys[0]]
+    var second: Vector2 = v41_touches[keys[1]]
+    result.append(first)
+    result.append(second)
     return result
 
 func _v41_pan_by_screen_delta(delta: Vector2) -> void:
