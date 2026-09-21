@@ -129,7 +129,7 @@ func _v44_anchor(kind: int) -> Vector2i:
         Cell.INDUSTRIAL:
             return V44_INDUSTRIAL_ANCHOR
         _:
-            return Vector2i(GRID_W / 2, GRID_H / 2)
+            return Vector2i(int(GRID_W / 2), int(GRID_H / 2))
 
 func _v44_affinity(p: Vector2i, kind: int) -> float:
     var anchor: Vector2i = _v44_anchor(kind)
