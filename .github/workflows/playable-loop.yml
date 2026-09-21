@@ -44,6 +44,8 @@ jobs:
         run: bash tools/run_zero_core_fun.sh
       - name: AXIVA ZERO B destination regression
         run: bash tools/run_zero_b_core_fun.sh
+      - name: AXIVA ZERO C structure and progression regression
+        run: bash tools/run_zero_c_core_fun.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -52,4 +54,5 @@ jobs:
             playable-loop.log
             zero-core-fun.log
             zero-b-core-fun.log
+            zero-c-core-fun.log
           retention-days: 7
