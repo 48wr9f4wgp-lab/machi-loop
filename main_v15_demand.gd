@@ -57,9 +57,19 @@ func _auto_grow_buildings() -> void:
     if candidates.is_empty():
         return
 
+    var p: Vector2i = _v15_pick_growth_candidate(candidates)
+    if p.x < 0:
+        return
+    grid[p.y][p.x] = _v15_choose_building_for_cell(p)
+
+func _v15_pick_growth_candidate(candidates: Array) -> Vector2i:
+    if candidates.is_empty():
+        return Vector2i(-1, -1)
     var index: int = rng.randi_range(0, candidates.size() - 1)
-    var p: Vector2i = candidates[index] as Vector2i
-    grid[p.y][p.x] = _choose_building_type()
+    return candidates[index] as Vector2i
+
+func _v15_choose_building_for_cell(_p: Vector2i) -> int:
+    return _choose_building_type()
 
 func _choose_building_type() -> int:
     var homes: int = _count_cells(Cell.RESIDENTIAL)
