@@ -1,6 +1,6 @@
 extends "res://main_v42_playable_loop.gd"
 
-# AXIVA v0.43 — Tempo & Payoff pass.
+# AXIVA v0.43 - Tempo & Payoff pass.
 # Preserve the fast first 15 seconds and road-caused response, but slow passive
 # background growth so the player has time to read the city and choose the next
 # arterial. Structural pressure is not allowed to become the authored problem
