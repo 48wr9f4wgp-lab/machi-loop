@@ -13,15 +13,15 @@
     "performance": "warn",
     "release": "warn"
   },
-  "next": "ZERO Cの変更送信・PR作成の承認を得てCIを確認し、別途承認範囲内でiPhone試遊へ進む。5〜8分で停滞理由・修復の納得感・メトロポリス到達の満足を検証する。",
-  "note": "ZERO C / Metropolis Gateは実装・ローカル自動検証済み。main/PagesはZERO Bのまま。自動承認審査がGitHub pushを拒否したため未送信。Cは試験用で通常都市・FTUE保存を読み書き/削除しない。実機・画面・性能は未検証。PRODUCTION_DECISION=UNDECIDED / RELEASE_APPROVAL=NOT_REQUESTED。",
+  "next": "ZERO C2のレビュー・CI後、特定buildのPages更新承認を得て実機で因果の読み取りを検証。",
+  "note": "ZERO CはPR #83で配信済み。ユーザーのiPhone画像でメトロポリス表示を確認したが、道路を大量に引いて効果が分からないとの報告。C2は土地のまとまり・操作結果・段階成長の可読性を試す仮説。Core FunはPARTIAL、PRODUCTION_DECISION=UNDECIDED。",
   "updated_at": "2026-09-21",
   "working_state": {
     "repository": "48wr9f4wgp-lab/machi-loop",
-    "branch": "experiment/zero-c-metropolis",
-    "implementation_commit": "f8253e0f582bfbf80ae5abca81e450d95330b66e",
-    "shared": false,
-    "validation_status": "PARTIAL"
+    "branch": "experiment/zero-c2-readable-planning",
+    "base_commit": "1722820f29d8ee23a9ee23c71d6122268a95c4ac",
+    "validation_status": "PARTIAL",
+    "commit_locator": "branch HEAD; validation document records tested scope"
   },
   "verified_baselines": {
     "deployed_zero_b": "bf28bdb5dea8e593af81e8ec603d3b7f377bcd2b",
@@ -31,11 +31,17 @@
       "scope": "graph + progression/repair/prevention/save isolation + normal/A/B regression + Web export",
       "result": "PASS automated; physical and visual NOT TESTED",
       "date": "2026-09-21"
+    },
+    "deployed_zero_c": {
+      "commit": "1722820f29d8ee23a9ee23c71d6122268a95c4ac",
+      "scope": "PR 7 workflows + main 4 workflows; live build.txt + headless live PCK boot; user iPhone screenshot reaches metropolis",
+      "result": "automated PASS; gameplay cause/effect unclear in user trial; not a device validation pass"
     }
   },
   "recovery_state": {
-    "unpushed_work": "experiment/zero-c-metropolis commits; preserved locally",
-    "blocker": "GitHub push denied by automatic approval review; explicit approval needed",
-    "reserved_scope": null
+    "local_branch": "experiment/zero-c2-readable-planning",
+    "baseline_tree_matches_remote": true,
+    "reserved_scope": null,
+    "release_approval": "Previous approval covered ZERO C. Material gameplay revision C2 requires its own Pages approval."
   }
 }

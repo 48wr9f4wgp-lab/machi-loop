@@ -9,6 +9,37 @@ const LARGE_CITY: int = 40
 const EDGE_CAPACITY: float = 1.55
 const STABLE_TICKS: int = 12
 
+static func has_room(grid: Array, p: Vector2i) -> bool:
+    # A parcel can share a 2x2 block with empty land or other buildings.
+    # Roads/water split blocks; occupancy alone must never remove room.
+    for dy: int in [-1, 0]:
+        for dx: int in [-1, 0]:
+            var valid: bool = true
+            for y: int in range(p.y + dy, p.y + dy + 2):
+                for x: int in range(p.x + dx, p.x + dx + 2):
+                    if y < 0 or y >= grid.size() or x < 0 or x >= grid[y].size():
+                        valid = false
+                    elif int(grid[y][x]) not in [0, 3, 4, 5]:
+                        valid = false
+            if valid:
+                return true
+    return false
+
+static func fragments_land(grid: Array, p: Vector2i) -> bool:
+    var neighbors: Array[Vector2i] = []
+    for y: int in range(maxi(0, p.y - 1), mini(grid.size(), p.y + 2)):
+        for x: int in range(maxi(0, p.x - 1), mini(grid[y].size(), p.x + 2)):
+            var q: Vector2i = Vector2i(x, y)
+            if q != p and has_room(grid, q):
+                neighbors.append(q)
+    var prior: int = int(grid[p.y][p.x])
+    grid[p.y][p.x] = 2
+    var fragmented: bool = false
+    for q: Vector2i in neighbors:
+        fragmented = fragmented or not has_room(grid, q)
+    grid[p.y][p.x] = prior
+    return fragmented
+
 static func path(roads: Dictionary, start: Vector2i, goal: Vector2i, blocked: Dictionary = {}) -> Array[Vector2i]:
     var result: Array[Vector2i] = []
     if not roads.has(start) or not roads.has(goal):
@@ -179,6 +210,8 @@ static func analyze(grid: Array) -> Dictionary:
             connected += 1
     var buildings: Dictionary = {}
     var districts: Array[int] = [0, 0, 0]
+    var spacious: Array[int] = [0, 0, 0]
+    var cramped: Dictionary = {}
     for y: int in range(grid.size()):
         for x: int in range(grid[y].size()):
             var kind: int = int(grid[y][x])
@@ -195,6 +228,10 @@ static func analyze(grid: Array) -> Dictionary:
                 var anchor: Vector2i = ANCHORS[i]
                 if ports[i].x >= 0 and kind == KINDS[i] and absi(p.x - anchor.x) + absi(p.y - anchor.y) <= 5:
                     districts[i] += 1
+                    if has_room(grid, p):
+                        spacious[i] += 1
+                    else:
+                        cramped[p] = true
     var routes: Array = []
     var loads: Dictionary = {}
     var edge_cells: Dictionary = {}
@@ -223,12 +260,13 @@ static func analyze(grid: Array) -> Dictionary:
             for p: Vector2i in edge_cells[edge]:
                 hotspots[p] = true
     var centers: int = 0
-    for count: int in districts:
+    for count: int in spacious:
         if count >= 4:
             centers += 1
     var ready: bool = connected == 3 and centers >= 2 and redundant_pairs >= 2 and peak <= 1.0
     return {"main": main, "accessible": accessible, "ports": ports,
         "connected": connected, "buildings": buildings, "districts": districts,
+        "spacious": spacious, "cramped": cramped,
         "centers": centers, "routes": routes, "loads": loads, "peak": peak,
         "hotspots": hotspots, "redundant_pairs": redundant_pairs, "ready": ready}
 

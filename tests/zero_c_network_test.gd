@@ -44,6 +44,34 @@ func _init() -> void:
     repair(empty_city, 0)
     require(not bool(Model.analyze(empty_city)["ready"]), "bare roads counted as mature centers")
     require(Model.stage(999, false) == 4, "population alone bypassed metropolis gate")
+    # Rapid blanket drawing leaves single-cell strips: more roads are not
+    # equivalent to usable city blocks. Traffic can be good while land is poor.
+    var dense: Array = empty_grid()
+    for y: int in range(22):
+        for x: int in range(16):
+            if x % 2 == 0 or y % 2 == 0:
+                dense[y][x] = 1
+    populate(dense)
+    var packed: Dictionary = Model.analyze(dense)
+    require(int(packed["connected"]) == 3 and packed["buildings"].size() >= 40, "dense fixture lacks connected growth")
+    require(int(packed["centers"]) == 0 and not bool(packed["ready"]), "road blanket bypassed land planning")
+    require(not packed["cramped"].is_empty(), "fragmented city lacks map feedback")
+    # Keep a useful network, remove excess roads, allow autonomous regrowth.
+    var retained: Array = tree_grid()
+    repair(retained, 0)
+    for y: int in range(22):
+        for x: int in range(16):
+            if int(retained[y][x]) == 1:
+                dense[y][x] = 1
+            elif int(dense[y][x]) == 1:
+                dense[y][x] = 0
+    populate(dense)
+    require(bool(Model.analyze(dense)["ready"]), "removing excess roads could not recover metropolis")
+    var block: Array = [[1,1,1,1], [1,3,0,1], [1,0,4,1], [1,1,1,1]]
+    var snapshot: Array = block.duplicate(true)
+    require(Model.has_room(block, Vector2i(1,1)), "occupied shared block is not usable")
+    require(Model.fragments_land(block, Vector2i(2,1)), "automatic feeder would destroy the last block")
+    require(block == snapshot, "local-road room preview mutated the grid")
     print("AXIVA_ZERO_C_NETWORK_RESULT checks=%d failures=%d" % [checks, failures])
     if failures == 0:
         print("AXIVA_ZERO_C_NETWORK_OK")
