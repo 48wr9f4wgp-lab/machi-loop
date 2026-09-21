@@ -1,0 +1,48 @@
+name: AXIVA current-main playable loop
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'main*.gd'
+      - 'domain/**'
+      - 'tests/**'
+      - 'tools/**'
+      - 'assets/jp_charset.txt'
+      - 'project.godot'
+      - '.github/workflows/**'
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: axiva-playable-loop-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  playable-loop:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    container:
+      image: barichello/godot-ci:4.7.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate and verify the actual Japanese font
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update
+          apt-get install -y --no-install-recommends fonts-noto-cjk python3-fonttools fontconfig
+          mkdir -p generated
+          FONT_SRC="$(fc-match 'Noto Sans CJK JP' -f '%{file}\n' | head -n 1)"
+          python3 -m fontTools.subset "$FONT_SRC" --font-number=0 --text-file=assets/jp_charset.txt --output-file=generated/MachiLoopJP.otf --layout-features='*'
+          python3 tools/check_playable_text.py --font generated/MachiLoopJP.otf
+      - name: Import current project
+        run: godot --headless --editor --path . --import --quit
+      - name: Input-to-recovery regression through current main
+        run: bash tools/run_playable_loop.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: axiva-playable-loop-evidence
+          path: playable-loop.log
+          retention-days: 7

@@ -4,16 +4,8 @@
   "reading": "アクシヴァ",
   "legacy_title_alias": "MACHI LOOP",
   "phase": "VERTICAL_SLICE",
-  "checks": {
-    "boot": "ok",
-    "test": "ok",
-    "device": "warn",
-    "save": "ok",
-    "analytics": "ok",
-    "performance": "warn",
-    "release": "warn"
-  },
-  "next": "iPhoneで?fresh=1を使い、empty land→first road→city born→growth→congestion→intervention→recoveryを1セッション通しで記録・検証する",
-  "note": "v0.37までのcomponent device checksはPASS。Recovery component、Expansion Camera、Road Input、Map Scale、Device Stabilityは実機確認済み。ただしVertical Slice v2のexitに必要なfresh-to-recovery通し実機runと、Master v2.4のDevice Validation（save/load、cold launch、suspend/resume、interruption、frame pacing、thermal/battery、resource dead-end等）は未完了。PRODUCTION_DECISION=UNDECIDED / RELEASE_APPROVAL=NOT_REQUESTED。",
-  "updated_at": "2026-09-19"
+  "checks": {"boot": "warn", "test": "warn", "device": "warn", "save": "warn", "analytics": "ok", "performance": "warn", "release": "warn"},
+  "next": "v0.42の現行main入力経由CIを確認後、同一iPhone sessionでfresh→成長→自然渋滞→買収/迂回→回復を検証する",
+  "note": "v0.42候補: 初回街誕生の統合復旧、有限の沿道成長反応、買収確認、LOCAL幹線化、入力安全性、ray基準カメラ、全体表示、日本語字形検査。実装と検証を分離。CI結果・実機結果は新commitに紐づけて記録し、過去v0.39 component PASSを最新mainへ自動継承しない。PR #75は別途未統合作業として保護。PRODUCTION_DECISION=UNDECIDED / RELEASE_APPROVAL=NOT_REQUESTED。",
+  "updated_at": "2026-09-21"
 }
