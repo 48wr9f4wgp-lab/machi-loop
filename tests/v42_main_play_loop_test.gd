@@ -10,6 +10,14 @@ func _init() -> void:
 func _run() -> void:
     root.size = Vector2i(430, 932)
     var game: Node = await _new_game()
+    _require(game.unlocked_cols == game.GRID_W, "v0.44 did not open the full slice map")
+    _require(not game.tool_rects.has(game.Tool.WIDEN), "WIDEN is still exposed as a permanent unexplained tool")
+    _require(game._v44_land_kind(game.V44_RESIDENTIAL_ANCHOR) == game.Cell.RESIDENTIAL, "residential growth pull missing")
+    _require(game._v44_land_kind(game.V44_COMMERCIAL_ANCHOR) == game.Cell.COMMERCIAL, "commercial growth pull missing")
+    _require(game._v44_land_kind(game.V44_INDUSTRIAL_ANCHOR) == game.Cell.INDUSTRIAL, "industrial growth pull missing")
+    _require(game._v44_path_pull_kind([game.V44_RESIDENTIAL_ANCHOR, game.V44_RESIDENTIAL_ANCHOR + Vector2i.RIGHT]) == game.Cell.RESIDENTIAL, "residential route preview is not meaningful")
+    _require(game._v44_path_pull_kind([game.V44_COMMERCIAL_ANCHOR, game.V44_COMMERCIAL_ANCHOR + Vector2i.RIGHT]) == game.Cell.COMMERCIAL, "commercial route preview is not meaningful")
+    _require(game._v44_path_pull_kind([game.V44_INDUSTRIAL_ANCHOR, game.V44_INDUSTRIAL_ANCHOR + Vector2i.LEFT]) == game.Cell.INDUSTRIAL, "industrial route preview is not meaningful")
     _road(game, Vector2i(3, 10), Vector2i(8, 10))
     _require(game.v40_commit_count == 1, "first input did not commit once")
     _require(game.population >= 13 and game.v04_first_growth_seeded, "first road did not seed an immediate home")
@@ -112,7 +120,7 @@ func _run() -> void:
         before_cash = game.cash
         _tap(game, game._v41_overview_rect().get_center())
         _require(game.cash == before_cash and JSON.stringify(game.grid) == saved_grid, "overview reset the city")
-        for corner: Vector2i in [Vector2i(0, 0), Vector2i(11, 0), Vector2i(0, 21), Vector2i(11, 21)]:
+        for corner: Vector2i in [Vector2i(0, 0), Vector2i(15, 0), Vector2i(0, 21), Vector2i(15, 21)]:
             var screen: Vector2 = game._v27_project_cell(corner, 0.0)
             _require(game._v41_world_area().has_point(screen), "overview excludes a playable corner")
             _require(game._screen_to_cell(screen) == corner, "corner picking failed")
@@ -169,11 +177,11 @@ func _run() -> void:
                 break
         _require(game.v29_completion_count > completion_before, "city did not visibly resume growth after recovery")
         _require(game.tick_count - recovery_tick >= game.V43_RECOVERY_RESTART_TICKS, "recovery growth resumed too early")
-    print("V42_MAIN_PLAY_LOOP_RESULT checks=%d failures=%d pressure_tick=%d recovery_drop=%.1f cash=%d" % [checks, failures, pressure_tick, game.v43_last_recovery_drop, game.cash])
+    print("V44_MAIN_PLAY_LOOP_RESULT checks=%d failures=%d pressure_tick=%d recovery_drop=%.1f cash=%d" % [checks, failures, pressure_tick, game.v43_last_recovery_drop, game.cash])
     game.queue_free()
     await process_frame
     if failures == 0:
-        print("V42_MAIN_PLAY_LOOP_OK")
+        print("V44_MAIN_PLAY_LOOP_OK")
     quit(0 if failures == 0 else 1)
 
 func _new_game() -> Node:
@@ -191,7 +199,7 @@ func _new_game() -> Node:
 func _mixed_city(game: Node) -> void:
     game._init_grid()
     game.cash = 1000
-    game.unlocked_cols = 12
+    game.unlocked_cols = game.GRID_W
     game.v08_goal_stage = game.V08_GOAL_COUNT
     game.v04_first_growth_seeded = true
     game.v23_birth_started = true
@@ -241,4 +249,4 @@ func _require(ok: bool, message: String) -> void:
     checks += 1
     if not ok:
         failures += 1
-        push_error("V42_MAIN_PLAY_LOOP_FAILED: " + message)
+        push_error("V44_MAIN_PLAY_LOOP_FAILED: " + message)

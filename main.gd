@@ -1,1 +1,1 @@
-extends "res://main_v43_tempo_payoff.gd"
+extends "res://main_v44_core_fun.gd"
