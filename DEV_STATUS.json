@@ -13,15 +13,15 @@
     "performance": "warn",
     "release": "warn"
   },
-  "next": "ZERO C2のレビュー・CI後、特定buildのPages更新承認を得て実機で因果の読み取りを検証。",
-  "note": "ZERO CはPR #83で配信済み。ユーザーのiPhone画像でメトロポリス表示を確認したが、道路を大量に引いて効果が分からないとの報告。C2は土地のまとまり・操作結果・段階成長の可読性を試す仮説。Core FunはPARTIAL、PRODUCTION_DECISION=UNDECIDED。",
-  "updated_at": "2026-09-21",
+  "next": "ZERO D（32×44・6地区）のPR/CIを確認し、特定ビルドのPages承認後に拡張意欲と操作感を実機評価する。",
+  "note": "C2 a425f2b2は配信済み。ユーザーは都市段階で再び「つないで終わり」と報告。マップが狭い仮説を優先し、独立したZERO Dを実装。DではC2の土地/メトロポリス制約を使わず、4倍の土地・地域別成長・移動を試す。Core Funは未合格、PRODUCTION_DECISION=UNDECIDED。",
+  "updated_at": "2026-09-22",
   "working_state": {
     "repository": "48wr9f4wgp-lab/machi-loop",
-    "branch": "experiment/zero-c2-readable-planning",
-    "base_commit": "1722820f29d8ee23a9ee23c71d6122268a95c4ac",
+    "branch": "experiment/zero-d-expansion",
+    "base_commit": "a425f2b277451a1e479fa85ba4929fb59be6ae44",
     "validation_status": "PARTIAL",
-    "commit_locator": "branch HEAD; validation document records tested scope"
+    "commit_locator": "branch HEAD; exact source/tree and CI in PR"
   },
   "verified_baselines": {
     "deployed_zero_b": "bf28bdb5dea8e593af81e8ec603d3b7f377bcd2b",
@@ -36,12 +36,17 @@
       "commit": "1722820f29d8ee23a9ee23c71d6122268a95c4ac",
       "scope": "PR 7 workflows + main 4 workflows; live build.txt + headless live PCK boot; user iPhone screenshot reaches metropolis",
       "result": "automated PASS; gameplay cause/effect unclear in user trial; not a device validation pass"
+    },
+    "deployed_zero_c2": {
+      "commit": "a425f2b277451a1e479fa85ba4929fb59be6ae44",
+      "scope": "CI and Pages/PCK boot; user screenshot shows city, says connecting feels finished",
+      "result": "automated PASS; Core Fun not achieved in user trial"
     }
   },
   "recovery_state": {
-    "local_branch": "experiment/zero-c2-readable-planning",
+    "local_branch": "experiment/zero-d-expansion",
     "baseline_tree_matches_remote": true,
     "reserved_scope": null,
-    "release_approval": "Previous approval covered ZERO C. Material gameplay revision C2 requires its own Pages approval."
+    "release_approval": "Previous specific approval covers C2. D requires specific-build approval before merge/Pages."
   }
 }

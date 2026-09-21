@@ -6,8 +6,10 @@ extends Node2D
 enum Cell { EMPTY, ARTERIAL, LOCAL, RESIDENTIAL, COMMERCIAL, INDUSTRIAL }
 enum Tool { ROAD, WIDEN, BULLDOZE }
 
-const GRID_W: int = 16
-const GRID_H: int = 22
+# Per-instance dimensions; production/default saves retain 16x22. Experiments
+# must set these before _ready, never resize an already initialized city.
+var GRID_W: int = 16
+var GRID_H: int = 22
 const TOP_H: float = 126.0
 const BOTTOM_H: float = 158.0
 const MARGIN: float = 12.0
