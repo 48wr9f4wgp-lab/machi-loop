@@ -249,4 +249,4 @@ func _require(ok: bool, message: String) -> void:
     checks += 1
     if not ok:
         failures += 1
-        push_error("V42_MAIN_PLAY_LOOP_FAILED: " + message)
+        push_error("V44_MAIN_PLAY_LOOP_FAILED: " + message)
