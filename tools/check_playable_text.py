@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--font', type=Path)
 args = parser.parse_args()
 required = set()
-for name in ('main_v40_land_acquisition.gd', 'main_v41_camera_navigation.gd', 'main_v42_playable_loop.gd'):
+for name in ('main_v40_land_acquisition.gd', 'main_v41_camera_navigation.gd', 'main_v42_playable_loop.gd', 'main_v43_tempo_payoff.gd'):
     required.update(c for c in (root / name).read_text(encoding='utf-8') if ord(c) > 127)
 charset = set((root / 'assets/jp_charset.txt').read_text(encoding='utf-8'))
 missing = required - charset

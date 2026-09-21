@@ -111,7 +111,7 @@ func _simulation_tick() -> void:
     super._simulation_tick()
     if tick_count == before_tick or v42_arrivals.is_empty():
         return
-    if congestion >= 68.0:
+    if congestion >= 68.0 and v29_recovery_stage != V29_STAGE_RECOVERY:
         v42_arrivals.clear()
         return
     if tick_count - v42_arrival_tick < 2:
@@ -205,6 +205,9 @@ func _v23_context_message() -> String:
         return "混んでいる幹線をタップして拡幅 ¥90"
     return super._v23_context_message()
 
+func _v42_build_label() -> String:
+    return "v0.42"
+
 func _draw() -> void:
     super._draw()
     var font: Font = v11_font if v11_font != null else ThemeDB.fallback_font
@@ -213,7 +216,7 @@ func _draw() -> void:
         _v42_draw_confirmation(font)
     elif not dragging:
         draw_string(font, Vector2(board_rect.position.x + 10.0, board_rect.end.y - 16.0),
-            "1本指で道・2本指で移動と拡大   v0.42", HORIZONTAL_ALIGNMENT_CENTER,
+            "1本指で道・2本指で移動と拡大   %s" % _v42_build_label(), HORIZONTAL_ALIGNMENT_CENTER,
             board_rect.size.x - 20.0, 9, Color("#214638"))
 
 func _v42_button(rect: Rect2, text: String, font: Font) -> void:

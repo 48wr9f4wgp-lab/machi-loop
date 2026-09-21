@@ -145,6 +145,8 @@ func _run() -> void:
             break
     _require(pressure_tick >= 0, "natural structural pressure did not arise within five minutes")
     if pressure_tick >= 0:
+        _require(game.tick_count >= game.V43_MIN_PROBLEM_TICKS, "structural problem arrived before the two-minute floor")
+        _require(game.tick_count <= game.V43_MAX_PROBLEM_TICKS, "structural problem missed the five-minute ceiling")
         game._v41_show_overview()
         _road(game, Vector2i(3, 10), Vector2i(3, 7))
         _confirm_if_needed(game)
@@ -153,13 +155,21 @@ func _run() -> void:
         _road(game, Vector2i(10, 7), Vector2i(10, 10))
         _confirm_if_needed(game)
         _require(game.v29_recovery_count > 0, "player bypass did not cause measured recovery")
-        for i: int in range(60):
+        _require(game.v43_last_recovery_drop > 0.0, "recovery payoff did not capture a measured traffic drop")
+        var recovery_tick: int = game.tick_count
+        var completion_before: int = game.v29_completion_count
+        for i: int in range(game.V43_RECOVERY_RESTART_TICKS - 1):
             game._simulation_tick()
             game._process(0.85)
-            if game.v29_completion_count > 0:
+        _require(game.v29_completion_count == completion_before, "growth resumed before the recovery payoff window")
+        for i: int in range(24):
+            game._simulation_tick()
+            game._process(0.85)
+            if game.v29_completion_count > completion_before:
                 break
-        _require(game.v29_completion_count > 0, "city did not visibly resume growth after recovery")
-    print("V42_MAIN_PLAY_LOOP_RESULT checks=%d failures=%d pressure_tick=%d cash=%d" % [checks, failures, pressure_tick, game.cash])
+        _require(game.v29_completion_count > completion_before, "city did not visibly resume growth after recovery")
+        _require(game.tick_count - recovery_tick >= game.V43_RECOVERY_RESTART_TICKS, "recovery growth resumed too early")
+    print("V42_MAIN_PLAY_LOOP_RESULT checks=%d failures=%d pressure_tick=%d recovery_drop=%.1f cash=%d" % [checks, failures, pressure_tick, game.v43_last_recovery_drop, game.cash])
     game.queue_free()
     await process_frame
     if failures == 0:
