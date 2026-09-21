@@ -40,9 +40,13 @@ jobs:
         run: godot --headless --editor --path . --import --quit
       - name: Input-to-recovery regression through current main
         run: bash tools/run_playable_loop.sh
+      - name: AXIVA ZERO core-fun regression
+        run: bash tools/run_zero_core_fun.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: axiva-playable-loop-evidence
-          path: playable-loop.log
+          path: |
+            playable-loop.log
+            zero-core-fun.log
           retention-days: 7
