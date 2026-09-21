@@ -1,1 +1,1 @@
-extends "res://main_v41_camera_navigation.gd"
+extends "res://main_v42_playable_loop.gd"
