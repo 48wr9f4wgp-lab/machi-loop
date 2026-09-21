@@ -211,13 +211,19 @@ func _v42_build_label() -> String:
 func _draw() -> void:
     super._draw()
     var font: Font = v11_font if v11_font != null else ThemeDB.fallback_font
-    _v42_button(_v41_overview_rect(), "全体", font)
+    _v42_draw_overview_control(font)
     if not v42_pending_path.is_empty():
         _v42_draw_confirmation(font)
     elif not dragging:
-        draw_string(font, Vector2(board_rect.position.x + 10.0, board_rect.end.y - 16.0),
-            "1本指で道・2本指で移動と拡大   %s" % _v42_build_label(), HORIZONTAL_ALIGNMENT_CENTER,
-            board_rect.size.x - 20.0, 9, Color("#214638"))
+        _v42_draw_footer_hint(font)
+
+func _v42_draw_overview_control(font: Font) -> void:
+    _v42_button(_v41_overview_rect(), "全体", font)
+
+func _v42_draw_footer_hint(font: Font) -> void:
+    draw_string(font, Vector2(board_rect.position.x + 10.0, board_rect.end.y - 16.0),
+        "1本指で道・2本指で移動と拡大   %s" % _v42_build_label(), HORIZONTAL_ALIGNMENT_CENTER,
+        board_rect.size.x - 20.0, 9, Color("#214638"))
 
 func _v42_button(rect: Rect2, text: String, font: Font) -> void:
     draw_rect(rect, Color("#174B38"))
