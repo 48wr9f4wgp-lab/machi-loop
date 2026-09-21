@@ -36,21 +36,23 @@ func _v35_desired_unlocked_cols(_pop: int) -> int:
     return GRID_W
 
 func _check_unlocks() -> void:
-    var target_level: int = 1
-    if population >= 90:
-        target_level = 2
-    if population >= 200:
-        target_level = 3
-    if population >= 360:
-        target_level = 4
+    # v0.44 removes land locking only. Keep the existing six-tier city
+    # progression mechanically intact so this title-local UX change does not
+    # silently collapse Functional Build progression.
+    var target_level: int = ProgressionModel.tier_for_population(population)
+    var previous_level: int = city_level
 
-    if target_level > city_level:
-        city_level = target_level
-        var reward: int = 180 * target_level
-        cash += reward
-        _toast("CITY LV %d  +Y%d" % [city_level, reward])
-
+    city_level = maxi(city_level, target_level)
     unlocked_cols = GRID_W
+
+    if city_level > previous_level:
+        var reward: int = 180 * city_level
+        cash += reward
+        v04_cash_flash = 0.85
+        v04_level_flash = 0.95
+        _toast("CITY LV %d  +Y%d" % [city_level, reward])
+        _recalculate_city()
+        _v07_save_city()
 
 # ---------------------------------------------------------------------------
 # Only the everyday tools stay in the permanent bar. Widening appears when the
