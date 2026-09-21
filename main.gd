@@ -1,1 +1,1 @@
-extends "res://main_zero_c_core_fun.gd"
+extends "res://main_zero_d_expansion.gd"
