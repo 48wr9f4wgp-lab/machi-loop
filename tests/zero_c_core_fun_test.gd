@@ -39,6 +39,12 @@ func _run() -> void:
     commit_line(game, Vector2i(1, 5), Vector2i(8, 5))
     commit_line(game, Vector2i(8, 5), Vector2i(8, 20))
     commit_line(game, Vector2i(8, 8), Vector2i(14, 8))
+    require(game.zero_c_effect.contains("駅につながった"), "station connection was not explained")
+    require(not game.zero_c_road_marks.is_empty(), "new connection has no map marks")
+    var feedback: String = game.zero_c_effect
+    var feedback_until: float = game.zero_c_effect_until
+    commit_line(game, Vector2i(8, 8), Vector2i(14, 8))
+    require(game.zero_c_effect == feedback and game.zero_c_effect_until == feedback_until, "no-op drawing invented a new effect")
     commit_line(game, Vector2i(8, 20), Vector2i(10, 20))
     for i: int in range(150):
         game._simulation_tick()
@@ -53,10 +59,12 @@ func _run() -> void:
         game._simulation_tick()
     require(game.zero_c_state["buildings"].size() == before, "stalled city kept growing")
     require(not game._zero_c_hint().is_empty(), "stalled city has no contextual explanation")
+    require(not game.zero_c_stage_notice.is_empty(), "growth stages have no transition feedback")
     # The repair is also performed through actual main road transactions.
     commit_line(game, Vector2i(1, 5), Vector2i(1, 20))
     commit_line(game, Vector2i(1, 20), Vector2i(14, 20))
     commit_line(game, Vector2i(14, 20), Vector2i(14, 8))
+    require(game.zero_c_effect.contains("流れが分かれた"), "alternate route was not explained")
     for i: int in range(120):
         game._simulation_tick()
         game._process(0.85)
@@ -101,6 +109,34 @@ func _run() -> void:
     for i: int in range(15):
         game._simulation_tick()
     require(game.zero_c_metropolis, "repaired deletion did not recover")
+    # The existing road-only eraser still rejects buildings, without claiming
+    # an improvement for a rejected action.
+    var before_removal: Dictionary = game.zero_c_state.duplicate(true)
+    var parcel: Vector2i = game.zero_c_state["buildings"].keys()[0]
+    game.zero_c_effect = ""
+    game._bulldoze(parcel)
+    require(not game.zero_c_effect.contains("土地がまとまり"), "building deletion falsely claimed a block recovery")
+    require(game.zero_c_state["buildings"].size() == before_removal["buildings"].size(), "road-only eraser removed a building")
+    # Reproduce a densely pre-drawn city, then recover through real erase inputs.
+    game.grid = Fixtures.empty_grid()
+    for y: int in range(22):
+        for x: int in range(16):
+            if x % 2 == 0 or y % 2 == 0:
+                game.grid[y][x] = game.Cell.ARTERIAL
+    Fixtures.populate(game.grid)
+    game._recalculate_city()
+    for i: int in range(15):
+        game._simulation_tick()
+    require(not game.zero_c_metropolis and game.zero_c_state["centers"] == 0, "rapid road blanket qualified")
+    require(game._zero_c_hint().contains("土地を広く"), "fragmentation lacks actionable hint")
+    for origin: Vector2i in [Vector2i(1,5), Vector2i(11,7)]:
+        for offset: Vector2i in [Vector2i(1,0), Vector2i(0,1), Vector2i(1,1), Vector2i(2,1), Vector2i(1,2)]:
+            game._bulldoze(origin + offset)
+    require(game._zero_c_spacious_total(game.zero_c_state) >= 8, "erasing roads did not restore usable parcels")
+    require(game.zero_c_effect.contains("土地がまとまり"), "land recovery was not explained")
+    for i: int in range(15):
+        game._simulation_tick()
+    require(game.zero_c_metropolis, "dense city could not recover through road removal")
     game.queue_free()
     await process_frame
     require(_save_fingerprint() == save_before, "C exit modified normal persistence")
