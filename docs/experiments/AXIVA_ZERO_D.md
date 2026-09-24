@@ -1,6 +1,6 @@
 # AXIVA ZERO D — room to expand
 
-Title-local WORKING HYPOTHESIS, 2026-09-22 JST.
+Title-local experimental record, proposed 2026-09-22 JST; trial verdict 2026-09-24.
 Baseline: deployed C2 a425f2b277451a1e479fa85ba4929fb59be6ae44;
 local 5e76e4f has the identical full tree 5dc7e39c.
 
@@ -35,7 +35,7 @@ different growth beyond old bounds; first destinations do not end growth;
 isolated roads do not grow; no forced road-count/space/time gate; persistence
 sentinels and default/A/B/C regression pass. Validate import/font/Web export,
 touch event and projection tests; device readability/performance/fun stay open.
-New build/destination approval is required before merging/deploying D.
+The user approved this exact D build for merge and Pages on 2026-09-21.
 
 ## Validation evidence
 
@@ -70,7 +70,30 @@ checks are NOT a screenshot/visual pass. iPhone frame time, touch feel, memory,
 legibility of shifted labels and desire to expand remain unverified. Target
 image reviewed earlier in this chat, not recreated. No market/Greenlight pass.
 
-Specific approval for this D build is needed before merge/Pages deployment;
-C2 a425f2b2 remains the deployed comparison. After approval, test without guided
-route instructions: does the player choose a next district after connecting
-nearby destinations, and do commercial/industrial outcomes feel different?
+## Deployment and user-trial verdict
+
+- PR #85 merged as `68bc91bfdaaa803f412ba6b473014f4b35ad5cf8` on
+  2026-09-21. Four main workflows passed; live `build.txt` matched the merge.
+  The downloaded live PCK booted headlessly. This does not prove native iOS
+  performance, visual quality or touch feel.
+- In response to the specific, explanation-free question of whether they wanted
+  to choose a further district after connecting nearby destinations, the user
+  answered 「ならない」 on 2026-09-24. Record D's **expansion-desire hypothesis as
+  not supported by this trial**. Do not reinterpret this as a test of all city
+  gameplay, all players, or map size in isolation.
+- The 4x map, six destination types and autonomous building growth establish
+  room and mechanical response, but have not produced a reason to make the next
+  road choice. The same verb can still feel finished after connecting targets.
+- Stop adding map area, fixed destinations, gates or art solely to rescue D.
+  Return to the title's proposed core sequence: growth creates a legible
+  structural problem; a road choice changes the traffic/growth pattern; the
+  player recognizes a satisfying recovery. Test at least two materially
+  different viable road responses where practical, without prescribing a line
+  or faking a debuff. Reuse existing recovery mechanics before expanding scope.
+- Next decision gate: on iPhone, after the first visible problem, does the
+  player identify a plausible action and *want* to try another road solution?
+  Capture the action, visible consequence and spontaneous reaction. Automated
+  simulation checks can establish causality but cannot establish desire.
+
+Status: Vertical Slice remains open; Core Fun has not passed; production is
+UNDECIDED. This verdict does not authorize a new Pages build or native release.
