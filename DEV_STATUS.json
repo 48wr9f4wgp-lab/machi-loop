@@ -18,10 +18,10 @@
   "updated_at": "2026-09-24",
   "working_state": {
     "repository": "48wr9f4wgp-lab/machi-loop",
-    "branch": "main",
+    "branch": "docs/zero-d-trial-verdict",
     "base_commit": "68bc91bfdaaa803f412ba6b473014f4b35ad5cf8",
     "validation_status": "PARTIAL",
-    "commit_locator": "main@68bc91bfdaaa803f412ba6b473014f4b35ad5cf8; documentation verdict prepared separately"
+    "commit_locator": "PR #86 head; implementation baseline main@68bc91bfdaaa803f412ba6b473014f4b35ad5cf8"
   },
   "verified_baselines": {
     "deployed_zero_b": "bf28bdb5dea8e593af81e8ec603d3b7f377bcd2b",
@@ -51,7 +51,7 @@
   },
   "recovery_state": {
     "local_branch": "docs/zero-d-trial-verdict",
-    "baseline_tree_matches_remote": false,
+    "baseline_tree_matches_remote": true,
     "reserved_scope": null,
     "release_approval": "The 2026-09-21 authorization covered the exact D trial build merged as 68bc91bfdaaa803f412ba6b473014f4b35ad5cf8 and its Pages deployment. No later gameplay build or App Store release is approved."
   }
