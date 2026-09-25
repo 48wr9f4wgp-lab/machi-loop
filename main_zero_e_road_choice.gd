@@ -56,6 +56,14 @@ func _v37_seed_recovery_fixture() -> void:
     for x: int in range(4, 8):
         grid[6][x] = Cell.COMMERCIAL
         grid[14][x] = Cell.INDUSTRIAL
+    # Give the congested street an actual built frontage while leaving room
+    # for short experiments beside it and full north/south bypasses at 7/13.
+    for x: int in [4, 5, 9, 10, 11]:
+        grid[9][x] = Cell.RESIDENTIAL if x % 3 else Cell.COMMERCIAL
+        grid[11][x] = Cell.RESIDENTIAL
+    for x: int in [2, 13]:
+        grid[8][x] = Cell.RESIDENTIAL
+        grid[12][x] = Cell.RESIDENTIAL
     zero_e_initial_buildings = _v29_building_count()
     _recalculate_city()
     v37_fixture_seed_count += 1
@@ -180,16 +188,9 @@ func _draw() -> void:
     super._draw()
     if not zero_e_session or zero_e_state.is_empty():
         return
-    for value: Variant in zero_e_state["hotspots"]:
-        var p: Vector2i = value
-        var screen: Vector2 = _v27_project_cell(p, 0.28)
+    # The road edge and actual cars carry the diagnosis. A single small marker
+    # locates the initial bottleneck without covering the world in UI rings.
+    if float(zero_e_state["peak"]) > 1.0:
+        var screen: Vector2 = _v27_project_cell(Vector2i(8, 10), 0.28)
         if _v41_world_area().has_point(screen):
-            draw_circle(screen, 9.0, Color(0.92, 0.33, 0.18, 0.75), false, 2.0)
-    if zero_e_state["routes"].size() < 2:
-        return
-    var route: Array = zero_e_state["routes"][1]
-    for value: Variant in route:
-        var p: Vector2i = value
-        var screen: Vector2 = _v27_project_cell(p, 0.32)
-        if _v41_world_area().has_point(screen):
-            draw_circle(screen, 4.0, Color(0.16, 0.66, 0.48, 0.75))
+            draw_circle(screen, 6.0, Color(0.92, 0.38, 0.22, 0.82), false, 1.5)
