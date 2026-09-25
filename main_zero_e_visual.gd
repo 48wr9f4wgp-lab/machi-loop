@@ -76,7 +76,7 @@ func _v28_base_camera_size() -> float:
     if not zero_e_session:
         return super._v28_base_camera_size()
     var aspect: float = board_rect.size.x / maxf(board_rect.size.y, 1.0)
-    return maxf(23.0, 14.0 / maxf(aspect, 0.4))
+    return maxf(21.0, 12.0 / maxf(aspect, 0.4))
 
 func _v10_add_road(p: Vector2i, cell: int) -> void:
     if not zero_e_session:
